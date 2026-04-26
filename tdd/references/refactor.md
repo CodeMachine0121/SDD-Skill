@@ -17,34 +17,6 @@ Run **all module tests** after each move. Stop if any fail.
 | 9 | Fluent business logic | Imperative mutation → method chaining |
 | 10 | No deferred assignment | Declare then assign → ternary / LINQ / `switch` expression |
 
-## Deep Module Mindset
-
-A well-designed service should be a **deep module**: small public interface, large hidden capability.
-
-```
-Good (deep)          Bad (shallow)
-┌─────────┐          ┌──────────────────────────────┐
-│  Place  │          │ ValidateStock                │
-│  Order  │          │ ReserveInventory             │
-└────┬────┘          │ CalculatePricing             │
-     │               │ CreateOrderRecord            │
-  complex            │ PublishOrderCreatedEvent     │
-  internals          └──────────────────────────────┘
-  hidden             (caller knows too much)
-```
-
-| Principle | What it means | Code signal |
-|-----------|--------------|-------------|
-| **Simple interface** | One method does one *business* thing | Method name is a verb phrase, ≤ 2 params |
-| **Hide decisions** | Internal algorithms, sequences, fallbacks stay private | No `private` methods needed → extract collaborator |
-| **Absorb complexity** | Let the module bear the pain, not the caller | Caller has zero conditional logic about *how* |
-| **Stable abstraction** | Interface changes rarely; implementation changes freely | `IXxxService` contract stays constant across sprints |
-
-> Shallow sign: the caller must call 3 methods in a specific order to accomplish one task.  
-> Deep sign: the caller calls 1 method and the service figures out the rest.
-
-The refactor rules below push in this direction — eliminating `private` methods forces hidden logic into proper collaborators, DTOs collapse noisy parameter lists, Decorators absorb cross-cutting concerns so the core stays clean.
-
 ## DI Lifetime
 
 | Lifetime | Use when |
