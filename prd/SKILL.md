@@ -23,7 +23,7 @@ Determine mode **before** any other step:
 
 1. Locate `UL-MAP.md` at `.sdd/UL-MAP.md`.
 2. **If not found** → stop. Tell the user:
-   > "No UL-MAP.md found. Please run the `ubi` skill first."
+   > "No UL-MAP.md found. Please run the `ubiquitous-language-mapping` skill first."
 3. **If found** → read it. Extract:
    - Project name and bounded context (header)
    - All domain terms and business actions
@@ -77,7 +77,7 @@ Skip any section already fully populated from analysis.
 1. Locate `UL-MAP.md` at `.sdd/UL-MAP.md`.
    Also read `.sdd/PROJECT.md` if it exists — use it to anchor answers (tech stack, conventions, constraints) without re-asking the user about project-level context.
 2. **If not found** → stop. Tell the user:
-   > "No UL-MAP.md found. Please run the `ubi` skill to initialize a Ubiquitous Language Map first."
+   > "No UL-MAP.md found. Please run the `ubiquitous-language-mapping` skill to initialize a Ubiquitous Language Map first."
 3. **If found** → read it. Extract:
    - Domain terms (Section 1 — Nouns & Concepts)
    - Business actions (Section 2 — Actions & Processes)
@@ -117,7 +117,7 @@ Work through the table below in order. Stop after each section to wait for the u
 After the interview is complete:
 
 1. Identify new terms, actions, or enum values surfaced during the interview.
-2. Apply `UPDATE` mode from the `ubi` skill:
+2. Apply `UPDATE` mode from the `ubiquitous-language-mapping` skill:
    - Add new rows; never delete existing rows.
    - Mark new entries with status `Archeology` unless the user confirmed the business meaning during the interview (then use `Confirmed`).
    - Update `Last Updated` date.

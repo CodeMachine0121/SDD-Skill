@@ -1,5 +1,5 @@
 ---
-name: ubi
+name: ubiquitous-language-mapping
 description: >
   Manage a Ubiquitous Language Map — bridges business terms, code names, and UI labels within a Bounded Context.
   Use when: initializing a new UL map, or updating/reconciling an existing one.
