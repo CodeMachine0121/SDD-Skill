@@ -4,6 +4,19 @@
 
 ---
 
+## Inspiration
+
+This project was sparked by Matt Pocock's talk **["It Ain't Broke: Why Software Fundamentals Matter More Than Ever"](https://www.youtube.com/watch?v=v4F1gFy-hqg&t=24s)**.
+
+The core argument: AI coding tools are powerful, but the developers who succeed with them are the ones who double down on engineering fundamentals — not the ones who try to skip them. Ubiquitous Language, vertical slices, TDD, and deep modules don't become less important when AI is in the loop. They become *more* important, because AI can produce spaghetti faster than any human ever could.
+
+> "The devs who succeed aren't the ones who delegate everything or nothing to AI. They're the ones who fall back on engineering fundamentals... the principles that make it work didn't break. They got more important."
+> — Matt Pocock
+
+Forge turns those fundamentals into a concrete, skill-by-skill workflow.
+
+---
+
 ## Overview
 
 Forge provides a structured, repeatable development workflow powered by Copilot CLI skills. Each skill owns one phase of the process, keeping responsibilities sharp and handoffs clean.
