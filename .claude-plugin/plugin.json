@@ -1,0 +1,11 @@
+{
+  "name": "sdd-skills",
+  "description": "A collection of GitHub Copilot CLI skills that guide software development from domain language all the way to production-ready code, covering ubiquitous language mapping, requirements clarification, PRD, TDD, and codebase improvement.",
+  "version": "1.0.0",
+  "author": {
+    "name": "James Hsueh",
+    "email": "asdfg55887@gmail.com"
+  },
+  "homepage": "https://github.com/CodeMachine0121/SDD-Skill",
+  "keywords": ["sdd", "tdd", "prd", "ubiquitous-language", "clarify", "refactoring", "domain-driven-design"]
+}
