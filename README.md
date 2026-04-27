@@ -1,4 +1,4 @@
-# Forge — AI Copilot Dev Skills
+# sdd-skills
 
 > A collection of GitHub Copilot CLI skills that guide software development from domain language all the way to production-ready code.
 
@@ -13,7 +13,7 @@ The core argument: AI coding tools are powerful, but the developers who succeed 
 > "The devs who succeed aren't the ones who delegate everything or nothing to AI. They're the ones who fall back on engineering fundamentals... the principles that make it work didn't break. They got more important."
 > — Matt Pocock
 
-Forge turns those fundamentals into a concrete, skill-by-skill workflow.
+Forge turns those fundamentals into a concrete, skill-by-skill workflow for the [SDD ecosystem](https://coding-afternoon.com/gsi-protocol/).
 
 ---
 
