@@ -1,15 +1,81 @@
 ---
 name: prd
 description: >
-  Conduct a requirements interview with the user, then produce two outputs:
-  (1) update the project's UL-MAP.md with newly discovered domain terms,
-  (2) generate a PRD file under .sdd/ in the project root.
-  Triggered by: "prd", "write a PRD", "feature spec", "product requirement", "/prd".
+  Two modes: (1) FEATURE — conduct a requirements interview and generate a PRD
+  file under .sdd/; (2) PROJECT — analyze UL-MAP.md and project architecture to
+  produce or update .sdd/PROJECT.md (vision, tech stack, conventions).
+  Triggered by: "prd", "write a PRD", "feature spec", "product requirement",
+  "/prd", "/prd project", "project overview", "project map".
 ---
 
-## Pre-flight
+## Mode Detection
 
-1. Locate `UL-MAP.md` in the project (check root, `docs/`, `.sdd/`).
+Determine mode **before** any other step:
+
+- If the user invoked `/prd project`, or said "project overview / project map / project vision" → **PROJECT mode** (go to [Project Pre-flight](#project-pre-flight)).
+- Otherwise → **FEATURE mode** (go to [Feature Pre-flight](#feature-pre-flight)).
+
+---
+
+## PROJECT mode
+
+### Project Pre-flight
+
+1. Locate `UL-MAP.md` at `.sdd/UL-MAP.md`.
+2. **If not found** → stop. Tell the user:
+   > "No UL-MAP.md found. Please run the `ubi` skill first."
+3. **If found** → read it. Extract:
+   - Project name and bounded context (header)
+   - All domain terms and business actions
+   - Any existing tech or architecture notes
+
+4. Scan project architecture signals. Read (if present):
+   - `package.json` / `pyproject.toml` / `*.csproj` / `go.mod` → infer tech stack and key libraries
+   - Top-level folder structure (`ls` one level deep) → infer architectural style
+   - `CLAUDE.md` / `README.md` → extract stated conventions, constraints, or principles
+
+5. Check if `.sdd/PROJECT.md` already exists.
+   - **If found** → read it. This is **UPDATE mode**: preserve existing content, only fill gaps or refresh stale sections.
+   - **If not found** → this is **CREATE mode**: draft from scratch.
+
+### Project Analysis & Draft
+
+Using data gathered in pre-flight, draft a `PROJECT.md` using [references/project-template.md](references/project-template.md):
+
+- **Section 1 (Vision):** Leave as `TBD` — cannot be inferred from code; must come from user.
+- **Section 2 (Tech Stack):** Populate from dependency files and folder scan.
+- **Section 3 (Architecture Principles):** Infer style and patterns from folder structure and any existing docs.
+- **Section 4 (Conventions):** Extract from `CLAUDE.md`, `README.md`, or config files (linters, formatters, CI).
+- **Section 5 (Constraints):** Extract from any stated SLAs, security configs, or `CLAUDE.md` notes.
+- **Section 6 (Glossary):** Pull top 5–10 most project-critical terms from UL-MAP.md.
+
+Present the draft to the user. Clearly mark every auto-inferred field and every `TBD`.
+
+### Project Gap Interview
+
+Ask **only** about sections that are `TBD` or flagged as uncertain. One section at a time.
+
+| # | Section | Key Questions |
+|---|---------|---------------|
+| 1 | **Vision & Mission** | What core problem does this project solve? Who are the primary users? What does success look like? What is explicitly out of scope? |
+| 4 | **Conventions** (gaps only) | Any naming, branching, testing, or review rules not captured in config files? |
+| 5 | **Constraints** (gaps only) | Performance SLAs? Security requirements? Budget or deployment constraints? Known tech debt? |
+
+Skip any section already fully populated from analysis.
+
+### Project Output
+
+1. Write (or overwrite) `.sdd/PROJECT.md` with the completed content.
+2. Report: "PROJECT.md written to `.sdd/PROJECT.md`."
+
+---
+
+## FEATURE mode
+
+### Feature Pre-flight
+
+1. Locate `UL-MAP.md` at `.sdd/UL-MAP.md`.
+   Also read `.sdd/PROJECT.md` if it exists — use it to anchor answers (tech stack, conventions, constraints) without re-asking the user about project-level context.
 2. **If not found** → stop. Tell the user:
    > "No UL-MAP.md found. Please run the `ubi` skill to initialize a Ubiquitous Language Map first."
 3. **If found** → read it. Extract:
@@ -18,6 +84,8 @@ description: >
    - Project name and bounded context (header)
 
    Store these internally as **domain vocabulary** to anchor interview questions in the correct business language.
+
+4. Check if a feature folder `.sdd/{yyyy-MM-dd}-{feature-slug}/` already exists with a `BRIEF.md` inside. **If found** → read the brief and use it to pre-fill interview answers. Tell the user which sections the brief already covers, then only ask questions for gaps.
 
 ---
 
@@ -59,10 +127,10 @@ After the interview is complete:
 
 ## Output — Step 2: Generate PRD
 
-1. Determine the feature name (slug) from the user's requirement (e.g., `user-login`, `export-report`).
-2. Ensure `.sdd/` directory exists at the project root (create if absent).
-3. Write `.sdd/<feature-slug>-PRD.md` using [references/prd-template.md](references/prd-template.md).
+1. Determine today's date in `yyyy-MM-dd` format and the feature slug (e.g., `user-login`, `export-report`).
+2. Ensure the feature folder `.sdd/{yyyy-MM-dd}-{feature-slug}/` exists (create `.sdd/` and the subfolder if absent).
+3. Write `.sdd/{yyyy-MM-dd}-{feature-slug}/PRD.md` using [references/prd-template.md](references/prd-template.md).
    - Fill every section with answers collected during the interview.
    - Use domain vocabulary from UL-MAP.md for all entity and action names.
    - Mark any unanswered section `TBD` rather than leaving it blank.
-4. Report: "PRD written to .sdd/<feature-slug>-PRD.md."
+4. Report: "PRD written to `.sdd/{yyyy-MM-dd}-{feature-slug}/PRD.md`."
