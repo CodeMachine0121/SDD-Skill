@@ -22,7 +22,7 @@ description: >
 
 ---
 
-## Cycle — RED 🔴 → GREEN 🟢 → REFACTOR 🔵
+## Cycle — RED 🔴 → GREEN 🟢 → REFACTOR 🔵 → COMMIT ✅
 
 For each `pending` test case:
 
@@ -35,6 +35,11 @@ For each `pending` test case:
 **REFACTOR** — Apply moves from [refactor.md](references/refactor.md) without changing behavior.
 - Run **all module tests** after each change. All must stay green.
 - Mark test case `done` in SQL.
+
+**COMMIT** — Commit this cycle before starting the next test case.
+- Stage only the files for this cycle (the test + its implementation), not unrelated changes.
+- Message: `feat: <test case id> — <short description>` (each cycle delivers test + implementation together).
+- One commit per completed TDD cycle, so every commit is green and self-contained.
 
 Repeat until no `pending` rows remain. Mark unresolvable cases `blocked` with reason.
 
