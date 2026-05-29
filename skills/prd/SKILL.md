@@ -34,7 +34,9 @@ Determine mode **before** any other step:
    - Top-level folder structure (`ls` one level deep) → infer architectural style
    - `CLAUDE.md` / `README.md` → extract stated conventions, constraints, or principles
 
-5. Check if `.sdd/PROJECT.md` already exists.
+5. **Read sibling feature docs.** List `.sdd/` and read the `BRIEF.md` / `PRD.md` files in existing feature folders. Mine them for recurring conventions, constraints, vocabulary, and implied vision/scope — these often answer project-level questions without asking the user.
+
+6. Check if `.sdd/PROJECT.md` already exists.
    - **If found** → read it. This is **UPDATE mode**: preserve existing content, only fill gaps or refresh stale sections.
    - **If not found** → this is **CREATE mode**: draft from scratch.
 
@@ -53,7 +55,7 @@ Present the draft to the user. Clearly mark every auto-inferred field and every 
 
 ### Project Gap Interview
 
-Ask **only** about sections that are `TBD` or flagged as uncertain. One section at a time.
+Investigate first, then ask. After the analysis and draft above, ask **only** about sections that remain `TBD` or genuinely uncertain — never about something the dependency files, folder scan, existing docs, or sibling feature docs already establish. One section at a time.
 
 | # | Section | Key Questions |
 |---|---------|---------------|
@@ -85,15 +87,23 @@ Skip any section already fully populated from analysis.
 
    Store these internally as **domain vocabulary** to anchor interview questions in the correct business language.
 
-4. Check if a feature folder `.sdd/{yyyy-MM-dd}-{feature-slug}/` already exists with a `BRIEF.md` inside. **If found** → read the brief and use it to pre-fill interview answers. Tell the user which sections the brief already covers, then only ask questions for gaps.
+4. Check if a feature folder `.sdd/{yyyy-MM-dd}-{feature-slug}/` already exists with a `BRIEF.md` inside. **If found** → read the brief and use it to pre-fill interview answers.
+
+5. **Investigate the codebase.** Before interviewing, search for code relevant to this feature: existing entities, services, endpoints, and patterns that the feature will touch or resemble. Note conventions and prior implementation decisions you can reuse instead of asking about.
+
+6. **Read sibling feature docs.** List `.sdd/` and read `BRIEF.md` / `PRD.md` in other feature folders that overlap with this one. Reuse their established requirements, decisions, and vocabulary rather than re-deriving them.
+
+7. **Build a pre-flight context summary.** Map what each interview section below can already be answered from the brief, codebase, and sibling docs vs. what is still a genuine gap. Tell the user which sections are already covered, then only ask about the gaps.
 
 ---
 
 ## Interview
 
+Interview the user **only for the gaps** identified in pre-flight. If the brief, codebase, and sibling docs already answer a section, pre-fill it and state your assumption for the user to confirm rather than asking from scratch. Never ask about something you could have learned from investigation.
+
 Ask questions **one section at a time**. Use the domain vocabulary extracted from UL-MAP.md to phrase questions in the project's established language (e.g., use the confirmed Domain Term, not the raw technical name).
 
-Work through the table below in order. Stop after each section to wait for the user's answer before proceeding.
+Work through the table below in order, **skipping sections already resolved by investigation**. Stop after each remaining section to wait for the user's answer before proceeding.
 
 | # | Section | Key Questions |
 |---|---------|---------------|

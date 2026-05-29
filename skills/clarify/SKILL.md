@@ -14,25 +14,33 @@ description: >
 
 ## Consensus Loop
 
-### Step 1 — Gathering
+### Step 1 — Investigate First
 
-When the user presents a request:
+When the user presents a request, **investigate before asking anything**. Do **not** open any editor tool — this step is read-only.
 
-1. Do **not** open any editor tool.
-2. Read relevant files silently if needed to understand context.
-3. Write down your understanding of the goal in plain language.
+1. **Scan the codebase** for code relevant to the request: search for related modules, entities, functions, and existing patterns. Note how similar things are already done.
+2. **Read sibling feature docs.** List `.sdd/` and read related `BRIEF.md` / `PRD.md` files in other feature folders, plus `.sdd/PROJECT.md` and `.sdd/UL-MAP.md` if they exist. Reuse decisions, conventions, and vocabulary already established there instead of re-asking.
+3. **Write down** your understanding of the goal in plain language, and an explicit list of what you now know from investigation vs. what is still genuinely unknown.
 
 ---
 
-### Step 2 — Clarification
+### Step 2 — Clarification (only if needed)
 
-Identify anything that is ambiguous, under-specified, or potentially risky. Present using this exact structure:
+After investigating, decide whether questions are actually necessary:
+
+- If the codebase and existing docs already answer everything and the intent is unambiguous → **skip to Step 3** and state that no clarification was needed.
+- Otherwise, ask **only** about what investigation could not resolve. Never ask about something you could have learned from the code or sibling docs.
+
+Identify anything that is still ambiguous, under-specified, or potentially risky. Present using this exact structure:
 
 ```
 **[Current Understanding]**
 <one-paragraph summary of what you think the user wants>
 
-**[Open Questions]**
+**[From Investigation]**
+- <what the codebase / sibling docs already established — patterns, conventions, prior decisions>
+
+**[Open Questions]**  (only what investigation could not resolve)
 1. <question>
 2. <question>
 …
