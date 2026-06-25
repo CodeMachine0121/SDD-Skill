@@ -42,13 +42,23 @@ Identify anything that is still ambiguous, under-specified, or potentially risky
 
 **[Open Questions]**  (only what investigation could not resolve)
 1. <question>
+   A. <option — your recommended choice goes first>
+   B. <option>
+   C. <option>
+   D. Other — type your own answer
 2. <question>
+   A. <option>
+   B. <option>
+   C. <option>
+   D. Other — type your own answer
 …
 
 **[Estimated Scope]**
 - Files likely affected: <list>
 - Files definitely NOT affected: <list if useful>
 ```
+
+**Every open question MUST offer at least three concrete options plus one final "Other — type your own answer" option.** Always present at least three distinct, mutually-exclusive choices the user can pick by letter, and always keep the last option open for the user to type a custom answer. Base the options on what you learned during investigation; put the option you recommend first.
 
 Wait for the user's answers before continuing.
 
@@ -122,3 +132,4 @@ Items the PRD author should resolve:
 | Only output | The sole file written is `BRIEF.md` inside the feature folder |
 | Re-loop on new info | Any new variable from the user resets to Step 2 |
 | Structured format | Always use the three-section format in Steps 2 and 3 |
+| Multiple-choice questions | Every open question offers ≥3 concrete options plus a final "Other — type your own answer" option |

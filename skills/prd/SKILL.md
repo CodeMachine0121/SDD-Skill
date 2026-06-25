@@ -17,6 +17,27 @@ Determine mode **before** any other step:
 
 ---
 
+## Question Format (applies to every question in both modes)
+
+Whenever you ask the user a question — in the Project Gap Interview or the Feature Interview — present it as a multiple-choice question:
+
+- Offer **at least three concrete options**, labelled `A`, `B`, `C`, …
+- Make the options distinct and mutually exclusive; base them on what you learned during investigation.
+- Put the option you recommend first.
+- Always add a final option: **`Other — type your own answer`** so the user can type a custom response.
+
+Example:
+
+```
+1. What outcome signals success for this feature?
+   A. <recommended, investigation-based option>
+   B. <option>
+   C. <option>
+   D. Other — type your own answer
+```
+
+---
+
 ## PROJECT mode
 
 ### Project Pre-flight
@@ -116,6 +137,7 @@ Work through the table below in order, **skipping sections already resolved by i
 | 7 | **Dependencies & Risks** | Third-party services? Dependencies on other teams? Unresolved technical or legal risks? |
 
 **Clarification rules:**
+- Ask every question as a multiple-choice question — ≥3 concrete options plus a final "Other — type your own answer" option (see [Question Format](#question-format-applies-to-every-question-in-both-modes)).
 - If an answer introduces a term not in UL-MAP.md, note it for the update step.
 - If an answer is ambiguous, ask one targeted follow-up before moving on.
 - If the user says "skip" or "N/A" for a section, record it as `N/A` and continue.
