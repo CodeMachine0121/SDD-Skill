@@ -84,6 +84,18 @@ Verifies that an agent's implementation conforms to the contract — the feature
 
 ---
 
+### `visionize` — Plan Visualization
+Turns a feature's `BRIEF.md` and/or `PRD.md` into a single self-contained HTML page so the team can *see* the plan instead of reading it — goal, scope, personas, user stories, business flow, and risks rendered as diagrams and cards.
+
+- Reads the spec from `.sdd/{date}-{feature}/` — `PRD.md` and/or `BRIEF.md`
+- Renders a Mermaid flow diagram, scope split, priority-grouped story cards, and a risk list
+- Never edits source code; produces a single double-click-to-open file
+- Outputs `.sdd/{date}-{feature}/VISION.html`
+
+> A projection, not authoring — it visualizes only what the spec already states and marks anything missing as `TBD`.
+
+---
+
 ### `improve-codebase` — Deep Module Refactoring
 Improves design quality by finding scattered logic and consolidating it into deep modules — stable interfaces that absorb complexity so callers stay simple.
 
@@ -110,7 +122,8 @@ Improves design quality by finding scattered logic and consolidating it into dee
 ```
 3. /clarify           ← reach consensus on what to build → BRIEF.md
 4. /prd               ← conduct requirements interview   → PRD.md
-5. /tdd               ← implement test-by-test           → green suite
+5. /visionize         ← visualize the plan as HTML       → VISION.html  (optional)
+6. /tdd               ← implement test-by-test           → green suite
 ```
 
 ### Ongoing maintenance (anytime, not feature-bound)
@@ -131,7 +144,8 @@ Improves design quality by finding scattered logic and consolidating it into dee
 ├── PROJECT.md                         # Project overview (prd project)
 └── {yyyy-MM-dd}-{feature}/
     ├── BRIEF.md                       # Requirements brief (clarify)
-    └── PRD.md                         # Product requirements (prd)
+    ├── PRD.md                         # Product requirements (prd)
+    └── VISION.html                    # Visual plan (visionize)
 ```
 
 ---
@@ -143,6 +157,7 @@ Improves design quality by finding scattered logic and consolidating it into dee
 | `ubiquitous-language-mapping` | `/ul-init`, `/ul-update` | `.sdd/UL-MAP.md` |
 | `clarify` | `/clarify` | `.sdd/{date}-{feature}/BRIEF.md` |
 | `prd` | `/prd`, `/prd project` | `.sdd/{date}-{feature}/PRD.md` or `.sdd/PROJECT.md` |
+| `visionize` | `/visionize` | `.sdd/{date}-{feature}/VISION.html` |
 | `tdd` | `/tdd` | implementation + tests |
 | `contract` | `/contract` | `.sdd/{feature}/CONTRACT.md` |
 | `improve-codebase` | `/improve-codebase` | refactored modules + interface tests |

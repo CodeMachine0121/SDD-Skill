@@ -1,0 +1,166 @@
+<!doctype html>
+<!--
+  VISION.html template for the `visionize` skill.
+  Fill every {{...}} placeholder from the Phase 1 plan model.
+  Remove blocks whose source content is absent, OR render a muted TBD chip.
+  Self-contained: all CSS/JS inline; only Mermaid loads from its CDN.
+-->
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{{FEATURE_NAME}} — Plan Vision</title>
+  <style>
+    :root {
+      --bg: #0f1117; --surface: #181b24; --surface-2: #20242f;
+      --text: #e6e8ee; --muted: #9aa0ad; --line: #2a2f3a;
+      --accent: #5b8cff; --p0: #ff6b6b; --p1: #ffb454; --p2: #5bd1a0;
+      --in: #5bd1a0; --out: #ff6b6b;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; background: var(--bg); color: var(--text);
+      font: 15px/1.6 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      max-width: 1040px; margin: 0 auto; padding: 32px 20px 80px;
+    }
+    h1 { font-size: 30px; margin: 0 0 4px; }
+    h2 { font-size: 19px; margin: 40px 0 14px; padding-bottom: 8px; border-bottom: 1px solid var(--line); }
+    .meta { color: var(--muted); font-size: 13px; margin-bottom: 24px; }
+    .meta code { background: var(--surface-2); padding: 1px 6px; border-radius: 4px; }
+
+    .hero { background: linear-gradient(135deg, var(--surface), var(--surface-2));
+            border: 1px solid var(--line); border-radius: 14px; padding: 24px 26px; }
+    .hero .problem { font-size: 17px; }
+    .callouts { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 18px; }
+    .callout { background: var(--bg); border: 1px solid var(--line); border-radius: 10px;
+               padding: 12px 16px; flex: 1 1 200px; }
+    .callout .label { color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: .04em; }
+    .callout .value { font-size: 18px; font-weight: 600; margin-top: 2px; }
+
+    .grid { display: grid; gap: 14px; }
+    .cards { grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); }
+    .card { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 16px 18px; }
+    .card h3 { margin: 0 0 6px; font-size: 16px; }
+    .card .sub { color: var(--muted); font-size: 13px; }
+
+    .scope { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .scope .col { border-radius: 12px; padding: 16px 18px; border: 1px solid var(--line); }
+    .scope .in  { background: rgba(91,209,160,.08); border-color: rgba(91,209,160,.35); }
+    .scope .out { background: rgba(255,107,107,.07); border-color: rgba(255,107,107,.3); }
+    .scope h3 { margin: 0 0 10px; }
+    .scope ul { margin: 0; padding-left: 18px; }
+
+    .story { background: var(--surface); border: 1px solid var(--line); border-left-width: 4px;
+             border-radius: 10px; padding: 14px 16px; margin-bottom: 12px; }
+    .story.p0 { border-left-color: var(--p0); }
+    .story.p1 { border-left-color: var(--p1); }
+    .story.p2 { border-left-color: var(--p2); }
+    .badge { display: inline-block; font-size: 11px; font-weight: 700; padding: 2px 8px;
+             border-radius: 20px; vertical-align: middle; }
+    .badge.p0 { background: var(--p0); color: #1a0000; }
+    .badge.p1 { background: var(--p1); color: #2a1700; }
+    .badge.p2 { background: var(--p2); color: #002417; }
+    .story .id { color: var(--muted); font-size: 12px; font-family: ui-monospace, monospace; }
+    .ac { list-style: none; padding: 0; margin: 10px 0 0; }
+    .ac li { padding-left: 24px; position: relative; margin: 4px 0; font-size: 14px; }
+    .ac li::before { content: "☐"; position: absolute; left: 0; color: var(--accent); }
+
+    .diagram { background: var(--surface); border: 1px solid var(--line); border-radius: 12px;
+               padding: 16px; overflow-x: auto; }
+    .diagram .note { color: var(--muted); font-size: 12px; margin-bottom: 8px; }
+
+    .metrics { display: flex; flex-wrap: wrap; gap: 10px; }
+    .metric { background: var(--surface-2); border: 1px solid var(--line); border-radius: 8px;
+              padding: 8px 14px; font-size: 14px; }
+    .metric b { color: var(--accent); }
+
+    .risk { background: var(--surface); border: 1px solid var(--line); border-radius: 10px;
+            padding: 12px 16px; margin-bottom: 10px; display: flex; gap: 12px; align-items: flex-start; }
+    .sev { font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 6px; white-space: nowrap; }
+    .sev.high { background: var(--p0); color: #1a0000; }
+    .sev.med  { background: var(--p1); color: #2a1700; }
+    .sev.low  { background: var(--p2); color: #002417; }
+
+    .tbd { display: inline-block; background: var(--surface-2); color: var(--muted);
+           border: 1px dashed var(--line); border-radius: 6px; padding: 2px 10px; font-size: 13px; }
+
+    @media (max-width: 720px) { .scope { grid-template-columns: 1fr; } }
+    @media print { body { background: #fff; color: #111; max-width: none; } .diagram { overflow: visible; } }
+  </style>
+</head>
+<body>
+  <h1>{{FEATURE_NAME}}</h1>
+  <div class="meta">
+    Plan vision · Source: <code>{{SOURCES}}</code> · {{FEATURE_DATE}}
+  </div>
+
+  <!-- GOAL -->
+  <div class="hero">
+    <div class="problem">{{PROBLEM_STATEMENT}}</div>
+    <div class="callouts">
+      <div class="callout"><div class="label">Expected outcome</div><div class="value">{{OUTCOME}}</div></div>
+      <div class="callout"><div class="label">Primary users</div><div class="value">{{PRIMARY_USERS}}</div></div>
+      <!-- add KPI callouts as the spec provides them; use <span class="tbd">TBD</span> when absent -->
+    </div>
+  </div>
+
+  <!-- SCOPE -->
+  <h2>Scope</h2>
+  <div class="scope">
+    <div class="col in"><h3>✓ In scope</h3><ul>{{IN_SCOPE_ITEMS}}</ul></div>
+    <div class="col out"><h3>✗ Out of scope</h3><ul>{{OUT_OF_SCOPE_ITEMS}}</ul></div>
+  </div>
+
+  <!-- PERSONAS -->
+  <h2>Who it's for</h2>
+  <div class="grid cards">
+    <!-- repeat per persona -->
+    <div class="card"><h3>{{PERSONA_NAME}}</h3><div class="sub">{{PERSONA_CONTEXT}}</div></div>
+  </div>
+
+  <!-- USER STORIES grouped by priority -->
+  <h2>What we're building</h2>
+  <!-- repeat per story; class p0/p1/p2 by priority -->
+  <div class="story p0">
+    <span class="badge p0">P0</span> <span class="id">{{STORY_ID}}</span>
+    <div style="margin-top:6px"><strong>{{STORY_TITLE}}</strong></div>
+    <div class="sub">As a {{ROLE}}, I want {{CAPABILITY}}, so that {{VALUE}}.</div>
+    <ul class="ac">
+      <li>{{ACCEPTANCE_CRITERION}}</li>
+    </ul>
+  </div>
+
+  <!-- BUSINESS FLOW -->
+  <h2>How it flows</h2>
+  <div class="diagram">
+    <div class="note">{{FLOW_NOTE}}</div><!-- e.g. "Derived from user stories" when inferred -->
+    <pre class="mermaid">
+flowchart TD
+    A([Start]) --> B[{{STEP}}]
+    B --> C{ {{DECISION}} }
+    C -->|happy path| D[{{STEP}}]
+    C -. edge case .-> E[{{EDGE_CASE}}]
+    D --> F([Done])
+    </pre>
+  </div>
+
+  <!-- NON-FUNCTIONAL -->
+  <h2>Constraints</h2>
+  <div class="metrics">
+    <div class="metric">Performance: <b>{{PERF}}</b></div>
+    <div class="metric">Security: <b>{{SECURITY}}</b></div>
+    <div class="metric">Compatibility: <b>{{COMPAT}}</b></div>
+  </div>
+
+  <!-- RISKS & OPEN DECISIONS -->
+  <h2>Risks & open decisions</h2>
+  <!-- repeat per risk; sev high/med/low -->
+  <div class="risk">
+    <span class="sev high">HIGH</span>
+    <div>{{RISK_DESCRIPTION}}</div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+  <script>mermaid.initialize({ startOnLoad: true, theme: "dark" });</script>
+</body>
+</html>
