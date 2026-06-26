@@ -73,6 +73,17 @@ Tracks progress in SQL so sessions can be resumed mid-cycle.
 
 ---
 
+### `contract` — Contract Traceability Matrix
+Verifies that an agent's implementation conforms to the contract — the feature's **PRD** (or **BRIEF**) — by **executed coverage**. Builds a matrix mapping every contract clause (PRD acceptance criteria & business rules, or BRIEF requirements) to its code site and test, runs the full suite once, then flags **gaps** (clauses with no implementation), **failing** clauses (test exists but red), and **orphans** (code answering to no clause — including out-of-scope violations).
+
+- Reads the contract from `.sdd/{feature}/` — `PRD.md` preferred, else `BRIEF.md`
+- Runs the test suite but never edits source code
+- Outputs `.sdd/{feature}/CONTRACT.md`
+
+> A passing test confirms a clause is exercised, not that it asserts the right thing — pair with `/tdd` for deeper behavioral confidence.
+
+---
+
 ### `improve-codebase` — Deep Module Refactoring
 Improves design quality by finding scattered logic and consolidating it into deep modules — stable interfaces that absorb complexity so callers stay simple.
 
@@ -133,4 +144,5 @@ Improves design quality by finding scattered logic and consolidating it into dee
 | `clarify` | `/clarify` | `.sdd/{date}-{feature}/BRIEF.md` |
 | `prd` | `/prd`, `/prd project` | `.sdd/{date}-{feature}/PRD.md` or `.sdd/PROJECT.md` |
 | `tdd` | `/tdd` | implementation + tests |
+| `contract` | `/contract` | `.sdd/{feature}/CONTRACT.md` |
 | `improve-codebase` | `/improve-codebase` | refactored modules + interface tests |
