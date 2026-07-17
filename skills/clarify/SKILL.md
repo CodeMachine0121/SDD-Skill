@@ -35,34 +35,7 @@ After investigating, decide whether questions are actually necessary:
 - If the codebase and existing docs already answer everything and the intent is unambiguous → **skip to Step 3** and state that no clarification was needed.
 - Otherwise, ask **only** about what investigation could not resolve. Never ask about something you could have learned from the code or sibling docs.
 
-Identify anything that is still ambiguous, under-specified, or potentially risky. Present using this exact structure:
-
-```
-**[Current Understanding]**
-<one-paragraph summary of what you think the user wants>
-
-**[From Investigation]**
-- <what the codebase / sibling docs already established — patterns, conventions, prior decisions>
-
-**[Open Questions]**  (only what investigation could not resolve)
-1. <question>
-   A. <option — your recommended choice goes first>
-   B. <option>
-   C. <option>
-   D. Other — type your own answer
-2. <question>
-   A. <option>
-   B. <option>
-   C. <option>
-   D. Other — type your own answer
-…
-
-**[Estimated Scope]**
-- Files likely affected: <list>
-- Files definitely NOT affected: <list if useful>
-```
-
-**Every open question MUST offer at least three concrete options plus one final "Other — type your own answer" option.** Always present at least three distinct, mutually-exclusive choices the user can pick by letter, and always keep the last option open for the user to type a custom answer. Base the options on what you learned during investigation; put the option you recommend first.
+Identify anything that is still ambiguous, under-specified, or potentially risky. Present using the exact structure in [references/clarification-format.md](references/clarification-format.md).
 
 Wait for the user's answers before continuing.
 
@@ -84,21 +57,7 @@ If a rule has a branch, there must be an example on each side of it. A rule with
 
 Phrase every example in business language (see the Core Rule) — describe the situation and outcome as a stakeholder would, not as the system implements it.
 
-Present like this:
-
-```
-**[Examples for Confirmation]**
-
-Rule: <the behavior rule this set of examples pins down>
-
-| # | Given (only relevant data) | When | Then |
-|---|---|---|---|
-| 1 (happy)     | <input>  | <action> | <expected outcome> |
-| 2 (boundary)  | <input>  | <action> | <expected outcome> |
-| 3 (exception) | <input>  | <action> | <expected outcome> |
-
-<repeat one block per rule when there are several>
-```
+Present using the format in [references/examples-format.md](references/examples-format.md).
 
 Wait for the user to confirm or correct the examples. Any correction may surface a new rule or hidden branch → return to **Step 2**.
 
@@ -106,29 +65,7 @@ Wait for the user to confirm or correct the examples. Any correction may surface
 
 ### Step 4 — Proposal
 
-After ambiguities are resolved and the examples are confirmed, present the brief outline:
-
-```
-**[Proposed Brief]** — awaiting confirmation
-
-Goal: <one sentence>
-
-Requirements:
-- <requirement>
-- <requirement>
-
-Out of scope:
-- <item>
-
-Open decisions (for PRD to resolve):
-- <item>
-
-Confirmed examples: <N> across <M> rules
-
-Will write to: .sdd/{yyyy-MM-dd}-{feature-slug}/BRIEF.md
-
-Type "Confirm" or "Go" to generate the file.
-```
+After ambiguities are resolved and the examples are confirmed, present the brief outline using the format in [references/proposal-format.md](references/proposal-format.md).
 
 If the user's response introduces new variables or changes scope → return to **Step 2**.
 
@@ -140,38 +77,7 @@ Only after receiving **"Confirm"** or **"Go"**:
 
 1. Determine today's date in `yyyy-MM-dd` format and the feature slug (e.g., `user-login`).
 2. Create the feature folder `.sdd/{yyyy-MM-dd}-{feature-slug}/` (create `.sdd/` first if absent).
-3. Write `.sdd/{yyyy-MM-dd}-{feature-slug}/BRIEF.md` using this template:
-
-```markdown
-# <Feature Name> — Requirements Brief
-
-## Goal
-<one-paragraph summary>
-
-## Requirements
-- <requirement>
-
-## Examples (Specification by Example)
-Each example lists **only** the data that affects the behavior — nothing more.
-
-### Rule: <behavior rule>
-| # | Given (only relevant data) | When | Then |
-|---|---|---|---|
-| 1 (happy)     | <input> | <action> | <expected outcome> |
-| 2 (boundary)  | <input> | <action> | <expected outcome> |
-| 3 (exception) | <input> | <action> | <expected outcome> |
-
-## Out of Scope
-- <item>
-
-## Open Decisions
-Items the PRD author should resolve:
-- <item>
-
-## Context / Background
-<any relevant notes from the clarification conversation>
-```
-
+3. Write `.sdd/{yyyy-MM-dd}-{feature-slug}/BRIEF.md` using [references/brief-template.md](references/brief-template.md).
 4. Before finishing, re-read the brief and confirm it contains **zero technical terms** — every rule and example must read as a business statement. Strip or rephrase anything that leaked implementation detail.
 5. Report: "Brief written to `.sdd/{yyyy-MM-dd}-{feature-slug}/BRIEF.md`. Run `/prd` to generate the PRD."
 
