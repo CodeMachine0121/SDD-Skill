@@ -57,7 +57,7 @@ Reaches full intent consensus with you before a single line is written. Once the
 ### `prd` — Product Requirements Document
 Conducts a requirements interview grounded in the UL Map, then generates a formal PRD. Two modes:
 
-- **Feature mode** (`/prd`): interview → PRD for a specific feature; also updates UL-MAP with any new terms
+- **Feature mode** (`/prd`): interview → PRD for a specific feature; also updates UL-MAP with any new terms. The PRD stays a **business specification** (no service/class/method names) and turns the brief's requirement examples into **Gherkin acceptance criteria** inline — no separate `.feature` file
 - **Project mode** (`/prd project`): analyze architecture + UL-MAP → produce/update `.sdd/PROJECT.md` (vision, tech stack, conventions)
 
 > **Standalone use:** run `/prd project` anytime to keep the project overview in sync with reality — no feature needed.
