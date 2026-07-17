@@ -29,6 +29,8 @@ ubiquitous-language-mapping  →  clarify  →  prd  →  architecture  →  tdd
 
 **The `.sdd/` folder** (Software Design Documents) is the shared workspace — skills read from and write to it, giving you a living record of domain knowledge, requirements, and decisions.
 
+> 📊 **Visual guide:** open [`docs/workflow.html`](docs/workflow.html) for a single-file, self-contained page explaining each stage's purpose, inputs, and outputs.
+
 ---
 
 ## Skills
