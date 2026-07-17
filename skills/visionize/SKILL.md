@@ -3,8 +3,8 @@ name: visionize
 description: >
   Turn a feature's BRIEF.md and/or PRD.md into a single self-contained HTML page
   that visualizes the plan — goal, scope, personas, user stories, business flow,
-  acceptance criteria, and risks — using diagrams and charts so developers can
-  see what is being built at a glance. Never edits source code.
+  acceptance criteria (as Gherkin scenarios), and risks — using diagrams and charts
+  so developers can see what is being built at a glance. Never edits source code.
   Triggered by: "visionize", "visualize the plan", "/visionize".
 ---
 
@@ -26,8 +26,8 @@ than inventing content.
 ## Pre-flight
 
 1. Find the spec source under `.sdd/{date}-{feature}/`:
-   - Read **`PRD.md`** if present (richer: personas, user stories, ACs, flow, risks).
-   - Read **`BRIEF.md`** if present (goal, requirements, out-of-scope, open decisions).
+   - Read **`PRD.md`** if present (richer: personas, user stories, Gherkin acceptance criteria, flow, risks).
+   - Read **`BRIEF.md`** if present (goal, requirements, business-language examples, out-of-scope, open decisions).
    - Read **both** when both exist — PRD is authoritative, BRIEF fills gaps PRD left out.
    - Neither found → stop: "No spec found. Run `/clarify` and `/prd` first."
    - Multiple feature folders → ask the user which one.
@@ -48,7 +48,8 @@ anything absent as `TBD`. Map each source section to a visual block:
 | Background & Goal / Goal | Problem + expected outcome | Hero banner + outcome/KPI callouts |
 | Out of Scope | Scope boundary | Two-column **In scope / Out of scope** split |
 | User Personas | Who & context | Persona cards |
-| User Stories & Acceptance Criteria | What & done-criteria | Story cards grouped by **priority (P0/P1/P2)**, each with an AC checklist |
+| User Stories (PRD §3) | Who does what & why | Story cards grouped by **priority (P0/P1/P2)** |
+| Acceptance Criteria — Gherkin scenarios (PRD §3) / Examples (BRIEF) | How each behavior is verified | Under each story, its **scenarios** as `Given/When/Then`, tagged **happy / boundary / exception**. From a BRIEF-only source, render the example rows the same way, grouped by rule |
 | Business Flow & Logic | Happy path + edge cases | **Mermaid `flowchart`** (happy path solid, edge cases dashed) |
 | Non-Functional Requirements | Constraints | Badge/metric grid (perf, security, compatibility) |
 | Dependencies & Risks / Open Decisions | Risks & unknowns | Risk list with severity, open-decision callouts |
@@ -56,8 +57,8 @@ anything absent as `TBD`. Map each source section to a visual block:
 Keep clause text close to verbatim so the page is traceable back to the spec.
 
 If a business flow is not explicitly described, derive a minimal flow **only** from
-the stated user stories' happy paths, and label the diagram "Derived from user
-stories" so the developer knows it was inferred.
+the happy-path scenarios, and label the diagram "Derived from scenarios" so the
+developer knows it was inferred.
 
 ---
 
@@ -87,7 +88,7 @@ Fill each block from the Phase 1 model. Requirements for the output file:
 ```
 Vision page written for "<feature>".
 Source: PRD.md + BRIEF.md   (or whichever existed)
-Blocks rendered: goal · scope · N personas · M stories · flow · K risks
+Blocks rendered: goal · scope · N personas · M stories · S scenarios · flow · K risks
 TBD blocks: <list any that were empty in the spec>
 
 Open it: open .sdd/{date}-{feature}/VISION.html

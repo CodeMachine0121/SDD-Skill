@@ -102,7 +102,7 @@ Verifies that an agent's implementation conforms to the contract — the feature
 Turns a feature's `BRIEF.md` and/or `PRD.md` into a single self-contained HTML page so the team can *see* the plan instead of reading it — goal, scope, personas, user stories, business flow, and risks rendered as diagrams and cards.
 
 - Reads the spec from `.sdd/{date}-{feature}/` — `PRD.md` and/or `BRIEF.md`
-- Renders a Mermaid flow diagram, scope split, priority-grouped story cards, and a risk list
+- Renders a Mermaid flow diagram, scope split, priority-grouped story cards with their **Gherkin scenarios** (Given/When/Then, tagged happy/boundary/exception), and a risk list
 - Never edits source code; produces a single double-click-to-open file
 - Outputs `.sdd/{date}-{feature}/VISION.html`
 
