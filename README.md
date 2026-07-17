@@ -44,9 +44,11 @@ All downstream skills depend on this map to phrase questions and generate artifa
 ---
 
 ### `clarify` — Requirements Brief
-Reaches full intent consensus with you before a single line is written. Produces a structured `BRIEF.md` that feeds directly into PRD.
+Reaches full intent consensus with you before a single line is written. Once the intent is captured, it pins the behavior down with **concrete examples** — covering the happy path plus every boundary and exception — and folds them into a structured `BRIEF.md` written **purely in business language**, ready to hand to PRD.
 
-- Runs a structured clarification loop (Gathering → Questions → Proposal)
+- Runs a structured consensus loop (Investigate → Questions → Examples → Proposal)
+- **Specification by Example:** every behavior rule is agreed via real examples; each example carries only the data that affects the behavior (data minimality)
+- **Business language only:** no technical terms in the brief — domain vocabulary only, so the spec stays about *what* not *how*
 - Never edits source files
 - Outputs `.sdd/{date}-{feature}/BRIEF.md`
 
@@ -143,7 +145,7 @@ Improves design quality by finding scattered logic and consolidating it into dee
 ├── UL-MAP.md                          # Ubiquitous Language Map (ubiquitous-language-mapping)
 ├── PROJECT.md                         # Project overview (prd project)
 └── {yyyy-MM-dd}-{feature}/
-    ├── BRIEF.md                       # Requirements brief (clarify)
+    ├── BRIEF.md                       # Requirements brief, business language + examples (clarify)
     ├── PRD.md                         # Product requirements (prd)
     └── VISION.html                    # Visual plan (visionize)
 ```
