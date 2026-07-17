@@ -75,11 +75,12 @@ The **"how"** stage that PRD deliberately leaves out. Reads the feature's `PRD.m
 ---
 
 ### `tdd` — Test-Driven Implementation
-Reads a PRD and drives implementation through red-green-refactor cycles.
+Implements a feature against exactly two documents — `PRD.md` (acceptance criteria) and `ARCH.md` (the technical design) — through red-green-refactor cycles.
 
-1. Parses acceptance criteria into atomic test cases
+1. Parses the PRD's Gherkin scenarios into atomic test cases, mapped to the components in `ARCH.md`
 2. Presents the test plan for your review
 3. Runs one test case at a time: write failing test → make it pass → refactor
+4. **Commits every cycle** (and every app integration separately) — following the project's existing commit style, or English Conventional Commits on a fresh project, with no SDD identifiers in the message
 
 Tracks progress in SQL so sessions can be resumed mid-cycle.
 
