@@ -22,7 +22,7 @@ Forge turns those fundamentals into a concrete, skill-by-skill workflow for the 
 Forge provides a structured, repeatable development workflow powered by Copilot CLI skills. Each skill owns one phase of the process, keeping responsibilities sharp and handoffs clean.
 
 ```
-ubiquitous-language-mapping  →  clarify  →  prd  →  tdd  →  improve-codebase
+ubiquitous-language-mapping  →  clarify  →  prd  →  architecture  →  tdd  →  improve-codebase
  ↑                    ↑                      ↑
  └─── foundation ─────┴── anytime, standalone ┘
 ```
@@ -61,6 +61,16 @@ Conducts a requirements interview grounded in the UL Map, then generates a forma
 - **Project mode** (`/prd project`): analyze architecture + UL-MAP → produce/update `.sdd/PROJECT.md` (vision, tech stack, conventions)
 
 > **Standalone use:** run `/prd project` anytime to keep the project overview in sync with reality — no feature needed.
+
+---
+
+### `architecture` — Technical Design
+The **"how"** stage that PRD deliberately leaves out. Reads the feature's `PRD.md` and designs the build plan: the change scope, the new classes/modules and their responsibilities (as a table), and the seams that keep future requirements cheap to add.
+
+- Reads `PRD.md` (its Gherkin acceptance criteria are the design contract), plus `PROJECT.md` / `UL-MAP.md` and the existing codebase
+- Designs from the perspective of **the next engineer** — deep modules, stable interfaces, an explicit axis-of-change seam so the next requirement is add-only
+- Maps every PRD scenario to the component that fulfills it (traceability for `/contract` and `/tdd`)
+- Never edits source code; outputs `.sdd/{date}-{feature}/ARCH.md`
 
 ---
 
@@ -125,7 +135,8 @@ Improves design quality by finding scattered logic and consolidating it into dee
 3. /clarify           ← reach consensus on what to build → BRIEF.md
 4. /prd               ← conduct requirements interview   → PRD.md
 5. /visionize         ← visualize the plan as HTML       → VISION.html  (optional)
-6. /tdd               ← implement test-by-test           → green suite
+6. /architecture      ← design the technical approach    → ARCH.md
+7. /tdd               ← implement test-by-test           → green suite
 ```
 
 ### Ongoing maintenance (anytime, not feature-bound)
@@ -146,7 +157,8 @@ Improves design quality by finding scattered logic and consolidating it into dee
 ├── PROJECT.md                         # Project overview (prd project)
 └── {yyyy-MM-dd}-{feature}/
     ├── BRIEF.md                       # Requirements brief, business language + examples (clarify)
-    ├── PRD.md                         # Product requirements (prd)
+    ├── PRD.md                         # Product requirements, business spec + Gherkin AC (prd)
+    ├── ARCH.md                        # Technical design (architecture)
     └── VISION.html                    # Visual plan (visionize)
 ```
 
@@ -160,6 +172,7 @@ Improves design quality by finding scattered logic and consolidating it into dee
 | `clarify` | `/clarify` | `.sdd/{date}-{feature}/BRIEF.md` |
 | `prd` | `/prd`, `/prd project` | `.sdd/{date}-{feature}/PRD.md` or `.sdd/PROJECT.md` |
 | `visionize` | `/visionize` | `.sdd/{date}-{feature}/VISION.html` |
+| `architecture` | `/architecture`, `/arch` | `.sdd/{date}-{feature}/ARCH.md` |
 | `tdd` | `/tdd` | implementation + tests |
 | `contract` | `/contract` | `.sdd/{feature}/CONTRACT.md` |
 | `improve-codebase` | `/improve-codebase` | refactored modules + interface tests |
