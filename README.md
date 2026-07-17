@@ -87,9 +87,10 @@ Tracks progress in SQL so sessions can be resumed mid-cycle.
 ---
 
 ### `contract` — Contract Traceability Matrix
-Verifies that an agent's implementation conforms to the contract — the feature's **PRD** (or **BRIEF**) — by **executed coverage**. Builds a matrix mapping every contract clause (PRD acceptance criteria & business rules, or BRIEF requirements) to its code site and test, runs the full suite once, then flags **gaps** (clauses with no implementation), **failing** clauses (test exists but red), and **orphans** (code answering to no clause — including out-of-scope violations).
+Verifies that an agent's implementation conforms to the contract — the feature's **PRD** (or **BRIEF**) — by **executed coverage**. Builds a matrix mapping every contract clause (each PRD Gherkin scenario & business rule, or BRIEF requirements & examples) to its code site and test, runs the full suite once, then flags **gaps** (clauses with no implementation), **failing** clauses (test exists but red), and **orphans** (code answering to no clause — including out-of-scope violations).
 
 - Reads the contract from `.sdd/{feature}/` — `PRD.md` preferred, else `BRIEF.md`
+- Uses `ARCH.md`'s scenario→component map (when present) to locate code faster and sharpen gap detection
 - Runs the test suite but never edits source code
 - Outputs `.sdd/{feature}/CONTRACT.md`
 

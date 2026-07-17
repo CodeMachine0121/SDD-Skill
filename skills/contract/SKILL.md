@@ -2,8 +2,9 @@
 name: contract
 description: >
   Verify an agent's implementation conforms to the contract — the feature's
-  PRD.md (preferred) or BRIEF.md — via a Traceability Matrix. Map every contract
-  clause to code + test, run the suite, then flag gaps (unimplemented clauses)
+  PRD.md (preferred; its Gherkin acceptance-criteria scenarios) or BRIEF.md — via
+  a Traceability Matrix. Map every contract clause to code + test, using ARCH.md's
+  component map when present, run the suite, then flag gaps (unimplemented clauses)
   and orphans (code with no clause). Never edits source code.
   Triggered by: "contract", "trace contract", "verify contract", "/contract".
 ---
@@ -24,12 +25,13 @@ limitation in the summary; pair with `/tdd` for deeper behavioral confidence.
 ## Pre-flight
 
 1. Find the contract source — the feature's spec document under `.sdd/{date}-{feature}/`:
-   - **`PRD.md` is the contract** when present (richer: has explicit ACs and business rules). Prefer it.
-   - Else fall back to **`BRIEF.md`** (Requirements + Out of Scope).
+   - **`PRD.md` is the contract** when present (richer: Gherkin acceptance criteria and business rules). Prefer it.
+   - Else fall back to **`BRIEF.md`** (Requirements + Examples + Out of Scope).
    - Neither found → stop: "No contract found. Run `/prd` (or `/clarify`) first."
    - Multiple feature folders → ask user which one.
-2. Find `.sdd/UL-MAP.md` (fallback: root, `docs/`). Missing → warn, continue (clause/code matching will be weaker without the glossary).
-3. Confirm the implementation location with the user if it is not obvious from the repo layout.
+2. Read **`ARCH.md`** in the same folder if present. Its Traceability table (PRD scenario → fulfilling component) is a map, not a contract: use it in Phase 3 to jump to the code that should satisfy each clause. A scenario with no ARCH mapping, or a mapped component that does not exist in the code, is a strong gap signal.
+3. Find `.sdd/UL-MAP.md` (fallback: root, `docs/`). Missing → warn, continue (clause/code matching will be weaker without the glossary).
+4. Confirm the implementation location with the user if it is not obvious from the repo layout.
 
 ---
 
@@ -41,14 +43,18 @@ Parse the contract into **atomic clauses**, one verifiable statement each. Assig
 
 | Source | ID prefix |
 |---|---|
-| Section 3 — Acceptance Criteria (per row) | `AC-` |
-| Section 6 — Business rules / constraints | `BR-` |
+| Section 3 — Acceptance Criteria (one per Gherkin `Scenario`) | `AC-` |
+| Section 4 — Core Business Rules | `BR-` |
+| Section 6 — Non-Functional Requirements | `NFR-` |
+
+Each Gherkin `Scenario` is one atomic clause; its `Given/When/Then` is the verifiable statement. Keep the scenario title in the clause text so it traces back.
 
 **When the contract is `BRIEF.md`:**
 
 | Source | ID prefix |
 |---|---|
 | Requirements (per bullet) | `REQ-` |
+| Examples (per example row) | `EX-` |
 
 Skip empty/TBD rows. Keep the clause text verbatim so it is traceable back to the source.
 
@@ -71,7 +77,7 @@ Run the project's **entire** unit-test suite once (detect the runner from the re
 
 For every clause, search the implementation and the test suite (read-only) to answer two questions, then cross-reference the Phase 2 results:
 
-- **Implementation** — which code satisfies it? Record `file:line` (the most specific site). Use UL-MAP terms to bridge business wording → code names.
+- **Implementation** — which code satisfies it? Record `file:line` (the most specific site). If `ARCH.md` mapped this clause to a component, start there; otherwise use UL-MAP terms to bridge business wording → code names. A clause whose ARCH-mapped component is absent from the code is a `gap`.
 - **Verification** — which test asserts it? Record the test name / `file:line`, and whether it **passed or failed** in the Phase 2 run.
 
 Then classify status:
@@ -98,6 +104,7 @@ Write `.sdd/{feature}/CONTRACT.md`:
 # Contract Traceability Matrix — {feature}
 
 Contract: {PRD.md | BRIEF.md}
+Design map: {ARCH.md | none}
 Implementation: {path}
 Test run: {command} — {P passed / F failed / T total}
 
