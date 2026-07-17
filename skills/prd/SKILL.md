@@ -1,9 +1,10 @@
 ---
 name: prd
 description: >
-  Two modes: (1) FEATURE — conduct a requirements interview and generate a PRD
-  file under .sdd/; (2) PROJECT — analyze UL-MAP.md and project architecture to
-  produce or update .sdd/PROJECT.md (vision, tech stack, conventions).
+  Two modes: (1) FEATURE — conduct a requirements interview and generate a
+  business-language PRD under .sdd/, turning the brief's requirement examples
+  into Gherkin acceptance criteria; (2) PROJECT — analyze UL-MAP.md and project
+  architecture to produce or update .sdd/PROJECT.md (vision, tech stack, conventions).
   Triggered by: "prd", "write a PRD", "feature spec", "product requirement",
   "/prd", "/prd project", "project overview", "project map".
 ---
@@ -95,6 +96,8 @@ Skip any section already fully populated from analysis.
 
 ## FEATURE mode
 
+> **The PRD is a business specification, not a technical design.** Write the entire PRD in business/domain language (align with `.sdd/UL-MAP.md`). It states *what* the product must do and *how success is verified* — never *how it is built*. Do **not** name services, classes, methods, tables, endpoints, frameworks, or design patterns anywhere in the PRD; those are implementation decisions owned by later phases. Acceptance criteria are expressed as Gherkin scenarios, but their steps stay in business language too.
+
 ### Feature Pre-flight
 
 1. Locate `UL-MAP.md` at `.sdd/UL-MAP.md`.
@@ -108,7 +111,7 @@ Skip any section already fully populated from analysis.
 
    Store these internally as **domain vocabulary** to anchor interview questions in the correct business language.
 
-4. Check if a feature folder `.sdd/{yyyy-MM-dd}-{feature-slug}/` already exists with a `BRIEF.md` inside. **If found** → read the brief and use it to pre-fill interview answers.
+4. Check if a feature folder `.sdd/{yyyy-MM-dd}-{feature-slug}/` already exists with a `BRIEF.md` inside. **If found** → read the brief and use it to pre-fill interview answers. Pay special attention to its **Examples (Specification by Example)** section — every example becomes a Gherkin acceptance-criteria scenario in the PRD (see Output Step 2), so it is the primary source of the AC, not the interview.
 
 5. **Investigate the codebase.** Before interviewing, search for code relevant to this feature: existing entities, services, endpoints, and patterns that the feature will touch or resemble. Note conventions and prior implementation decisions you can reuse instead of asking about.
 
@@ -137,6 +140,7 @@ Work through the table below in order, **skipping sections already resolved by i
 | 7 | **Dependencies & Risks** | Third-party services? Dependencies on other teams? Unresolved technical or legal risks? |
 
 **Clarification rules:**
+- **Acceptance criteria come from the brief's examples, not the interview.** Do not re-ask for them — in the PRD each brief example becomes a Gherkin scenario (Output Step 2). Only ask when an example is missing a boundary or exception you would expect.
 - Ask every question as a multiple-choice question — ≥3 concrete options plus a final "Other — type your own answer" option (see [Question Format](#question-format-applies-to-every-question-in-both-modes)).
 - If an answer introduces a term not in UL-MAP.md, note it for the update step.
 - If an answer is ambiguous, ask one targeted follow-up before moving on.
@@ -164,5 +168,8 @@ After the interview is complete:
 3. Write `.sdd/{yyyy-MM-dd}-{feature-slug}/PRD.md` using [references/prd-template.md](references/prd-template.md).
    - Fill every section with answers collected during the interview.
    - Use domain vocabulary from UL-MAP.md for all entity and action names.
+   - **Acceptance Criteria (Section 3):** convert every requirement example in `BRIEF.md` into a Gherkin `Scenario` (`Given / And / When / Then / And`), grouped under the user story it belongs to. Preserve the happy-path / boundary / exception coverage from the brief, and keep the data-minimality principle — each step mentions only the data that drives the outcome. The scenarios live **inline in the PRD**; do not emit a separate `.feature` file.
+     - **Every `Then` must state a concrete, observable business outcome** — a specific state, message, or value the domain can check (e.g. `Then 結帳被拒絕,並顯示「金額不正確」`). Never a vague one (`Then 系統正確處理訂單`), because a downstream verifier turns each `Then` into the oracle it checks the code against. "Concrete" is **not** "technical": still no error codes, return shapes, field names, or endpoints — the outcome stays in business language; its technical form is decided later in `architecture`.
    - Mark any unanswered section `TBD` rather than leaving it blank.
-4. Report: "PRD written to `.sdd/{yyyy-MM-dd}-{feature-slug}/PRD.md`."
+4. **Business-language check.** Re-read the finished PRD and confirm it contains **zero technical terms** — no service / class / method / table / endpoint names, frameworks, or design patterns, in the AC scenarios or anywhere else. Rephrase anything that leaked implementation detail before reporting.
+5. Report: "PRD written to `.sdd/{yyyy-MM-dd}-{feature-slug}/PRD.md`."

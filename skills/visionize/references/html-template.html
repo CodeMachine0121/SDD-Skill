@@ -61,9 +61,18 @@
     .badge.p1 { background: var(--p1); color: #2a1700; }
     .badge.p2 { background: var(--p2); color: #002417; }
     .story .id { color: var(--muted); font-size: 12px; font-family: ui-monospace, monospace; }
-    .ac { list-style: none; padding: 0; margin: 10px 0 0; }
-    .ac li { padding-left: 24px; position: relative; margin: 4px 0; font-size: 14px; }
-    .ac li::before { content: "☐"; position: absolute; left: 0; color: var(--accent); }
+    .scenario { margin: 10px 0 0; padding: 10px 12px; border: 1px solid var(--line); border-radius: 8px; }
+    .scenario + .scenario { margin-top: 8px; }
+    .stag { display: inline-block; font-size: 10px; font-weight: 700; text-transform: uppercase;
+            letter-spacing: .04em; padding: 1px 6px; border-radius: 4px; margin-bottom: 6px; }
+    .stag.happy { background: var(--p2); color: #002417; }
+    .stag.boundary { background: var(--p1); color: #2a1700; }
+    .stag.exception { background: var(--p0); color: #1a0000; }
+    .scenario .title { font-size: 13px; font-weight: 600; margin: 2px 0 4px; }
+    .gwt { list-style: none; padding: 0; margin: 0; font-size: 13px; }
+    .gwt li { margin: 2px 0; }
+    .gwt .kw { display: inline-block; min-width: 46px; font-family: ui-monospace, monospace;
+               font-weight: 700; color: var(--accent); }
 
     .diagram { background: var(--surface); border: 1px solid var(--line); border-radius: 12px;
                padding: 16px; overflow-x: auto; }
@@ -125,9 +134,16 @@
     <span class="badge p0">P0</span> <span class="id">{{STORY_ID}}</span>
     <div style="margin-top:6px"><strong>{{STORY_TITLE}}</strong></div>
     <div class="sub">As a {{ROLE}}, I want {{CAPABILITY}}, so that {{VALUE}}.</div>
-    <ul class="ac">
-      <li>{{ACCEPTANCE_CRITERION}}</li>
-    </ul>
+    <!-- repeat per Gherkin scenario; tag happy / boundary / exception -->
+    <div class="scenario">
+      <span class="stag happy">Happy</span>
+      <div class="title">{{SCENARIO_TITLE}}</div>
+      <ul class="gwt">
+        <li><span class="kw">Given</span> {{GIVEN}}</li>
+        <li><span class="kw">When</span> {{WHEN}}</li>
+        <li><span class="kw">Then</span> {{THEN}}</li>
+      </ul>
+    </div>
   </div>
 
   <!-- BUSINESS FLOW -->

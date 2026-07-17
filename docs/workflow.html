@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>sdd-skills Workflow 說明</title>
+<style>
+  :root {
+    --bg: #ffffff;
+    --bg-soft: #f6f7f9;
+    --bg-card: #ffffff;
+    --fg: #1a1d21;
+    --fg-soft: #5a6270;
+    --border: #e3e6ea;
+    --accent: #4f6bed;
+    --accent-soft: #eef1fd;
+    --foundation: #7c53c3;
+    --foundation-soft: #f2ecfb;
+    --main: #2f8f6b;
+    --main-soft: #e7f5ee;
+    --aux: #c2790f;
+    --aux-soft: #fbf1dd;
+    --shadow: 0 1px 3px rgba(0,0,0,.06), 0 8px 24px rgba(0,0,0,.05);
+    --radius: 14px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #0e1116;
+      --bg-soft: #161b22;
+      --bg-card: #161b22;
+      --fg: #e6edf3;
+      --fg-soft: #9aa4b2;
+      --border: #2a313c;
+      --accent: #7d93f5;
+      --accent-soft: #1c2438;
+      --foundation: #b493e8;
+      --foundation-soft: #241c33;
+      --main: #62c99b;
+      --main-soft: #14271f;
+      --aux: #e0a94a;
+      --aux-soft: #2b2211;
+      --shadow: 0 1px 3px rgba(0,0,0,.4), 0 8px 24px rgba(0,0,0,.35);
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0e1116; --bg-soft: #161b22; --bg-card: #161b22; --fg: #e6edf3;
+    --fg-soft: #9aa4b2; --border: #2a313c; --accent: #7d93f5; --accent-soft: #1c2438;
+    --foundation: #b493e8; --foundation-soft: #241c33; --main: #62c99b; --main-soft: #14271f;
+    --aux: #e0a94a; --aux-soft: #2b2211; --shadow: 0 1px 3px rgba(0,0,0,.4), 0 8px 24px rgba(0,0,0,.35);
+  }
+  :root[data-theme="light"] {
+    --bg: #ffffff; --bg-soft: #f6f7f9; --bg-card: #ffffff; --fg: #1a1d21;
+    --fg-soft: #5a6270; --border: #e3e6ea; --accent: #4f6bed; --accent-soft: #eef1fd;
+    --foundation: #7c53c3; --foundation-soft: #f2ecfb; --main: #2f8f6b; --main-soft: #e7f5ee;
+    --aux: #c2790f; --aux-soft: #fbf1dd; --shadow: 0 1px 3px rgba(0,0,0,.06), 0 8px 24px rgba(0,0,0,.05);
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang TC", "Microsoft JhengHei", "Noto Sans TC", Roboto, Helvetica, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--fg);
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 0 20px 80px; }
+
+  header {
+    padding: 56px 0 32px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 40px;
+  }
+  .eyebrow {
+    font-size: 13px; font-weight: 600; letter-spacing: .08em;
+    text-transform: uppercase; color: var(--accent);
+  }
+  h1 { font-size: clamp(28px, 5vw, 42px); margin: 10px 0 12px; line-height: 1.2; letter-spacing: -.02em; }
+  .lede { font-size: 17px; color: var(--fg-soft); max-width: 680px; margin: 0; }
+
+  .theme-toggle {
+    position: fixed; top: 16px; right: 16px; z-index: 10;
+    background: var(--bg-card); border: 1px solid var(--border);
+    color: var(--fg); border-radius: 999px; padding: 8px 14px;
+    font-size: 13px; cursor: pointer; box-shadow: var(--shadow);
+  }
+
+  h2 { font-size: 24px; margin: 56px 0 8px; letter-spacing: -.01em; }
+  .section-sub { color: var(--fg-soft); margin: 0 0 24px; font-size: 15px; }
+
+  /* Flow diagram */
+  .flow {
+    display: flex; flex-wrap: wrap; align-items: stretch; gap: 10px;
+    padding: 24px; background: var(--bg-soft); border: 1px solid var(--border);
+    border-radius: var(--radius); overflow-x: auto;
+  }
+  .flow-node {
+    flex: 1 1 130px; min-width: 130px; text-align: center;
+    padding: 14px 10px; border-radius: 10px; background: var(--bg-card);
+    border: 1px solid var(--border); position: relative;
+  }
+  .flow-node .cmd { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 13px; font-weight: 600; }
+  .flow-node .tag { display: block; font-size: 11px; color: var(--fg-soft); margin-top: 4px; }
+  .flow-node.foundation { border-color: var(--foundation); background: var(--foundation-soft); }
+  .flow-node.main { border-color: var(--main); background: var(--main-soft); }
+  .arrow { display: flex; align-items: center; color: var(--fg-soft); font-size: 20px; }
+  @media (max-width: 640px) { .arrow { transform: rotate(90deg); width: 100%; justify-content: center; } }
+
+  .aux-row { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 12px; }
+  .aux-chip {
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 12px;
+    padding: 6px 12px; border-radius: 999px; background: var(--aux-soft);
+    border: 1px solid var(--aux); color: var(--fg);
+  }
+
+  /* Cards */
+  .cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 16px; margin-top: 8px; }
+  .card {
+    background: var(--bg-card); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 20px; box-shadow: var(--shadow);
+    border-top: 3px solid var(--accent);
+  }
+  .card.foundation { border-top-color: var(--foundation); }
+  .card.main { border-top-color: var(--main); }
+  .card.aux { border-top-color: var(--aux); }
+  .card h3 { margin: 0 0 4px; font-size: 17px; display: flex; align-items: center; gap: 8px; }
+  .card .num {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 24px; height: 24px; border-radius: 7px; font-size: 13px; font-weight: 700;
+    background: var(--accent-soft); color: var(--accent); flex-shrink: 0;
+  }
+  .card.foundation .num { background: var(--foundation-soft); color: var(--foundation); }
+  .card.main .num { background: var(--main-soft); color: var(--main); }
+  .card.aux .num { background: var(--aux-soft); color: var(--aux); }
+  .card .cmds { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 12px; color: var(--fg-soft); margin: 0 0 12px; }
+  .card .desc { font-size: 14px; margin: 0 0 14px; }
+  .io { font-size: 13px; border-top: 1px dashed var(--border); padding-top: 12px; }
+  .io div { margin-bottom: 6px; }
+  .io .k { font-weight: 600; color: var(--fg-soft); display: inline-block; min-width: 56px; }
+  code {
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    background: var(--bg-soft); border: 1px solid var(--border);
+    padding: 1px 6px; border-radius: 6px; font-size: .88em;
+  }
+
+  /* Table */
+  .table-scroll { overflow-x: auto; border: 1px solid var(--border); border-radius: var(--radius); }
+  table { border-collapse: collapse; width: 100%; min-width: 720px; font-size: 14px; }
+  th, td { text-align: left; padding: 12px 14px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  th { background: var(--bg-soft); font-weight: 600; position: sticky; top: 0; }
+  tbody tr:last-child td { border-bottom: none; }
+  tbody tr:hover { background: var(--bg-soft); }
+  td code { white-space: nowrap; }
+
+  .legend { display: flex; flex-wrap: wrap; gap: 16px; margin: 20px 0 0; font-size: 13px; color: var(--fg-soft); }
+  .legend span { display: inline-flex; align-items: center; gap: 6px; }
+  .dot { width: 11px; height: 11px; border-radius: 3px; display: inline-block; }
+  .dot.f { background: var(--foundation); }
+  .dot.m { background: var(--main); }
+  .dot.a { background: var(--aux); }
+
+  footer { margin-top: 64px; padding-top: 24px; border-top: 1px solid var(--border); color: var(--fg-soft); font-size: 13px; }
+  footer code { font-size: 12px; }
+</style>
+</head>
+<body>
+<button class="theme-toggle" id="themeToggle">◐ 切換主題</button>
+<div class="wrap">
+
+  <header>
+    <div class="eyebrow">sdd-skills · Claude Code Plugin</div>
+    <h1>從領域語言到正式程式碼的開發工作流</h1>
+    <p class="lede">8 個 skill 各自負責一個階段,職責分明、交接乾淨。所有 skill 共用 <code>.sdd/</code> 資料夾作為工作區,形成領域知識、需求與決策的活紀錄。</p>
+  </header>
+
+  <h2>主線流程</h2>
+  <p class="section-sub">地基先行 → 功能開發主線,由左至右串接。</p>
+  <div class="flow">
+    <div class="flow-node foundation">
+      <span class="cmd">ul-mapping</span>
+      <span class="tag">地基 · 領域詞彙</span>
+    </div>
+    <div class="arrow">→</div>
+    <div class="flow-node main"><span class="cmd">clarify</span><span class="tag">需求共識</span></div>
+    <div class="arrow">→</div>
+    <div class="flow-node main"><span class="cmd">prd</span><span class="tag">需求規格</span></div>
+    <div class="arrow">→</div>
+    <div class="flow-node main"><span class="cmd">architecture</span><span class="tag">技術設計</span></div>
+    <div class="arrow">→</div>
+    <div class="flow-node main"><span class="cmd">tdd</span><span class="tag">TDD 實作</span></div>
+  </div>
+  <div class="aux-row">
+    <span class="aux-chip">＋ contract · 契約驗證</span>
+    <span class="aux-chip">＋ visionize · 計畫可視化</span>
+    <span class="aux-chip">＋ improve-codebase · 深模組重構</span>
+    <span style="font-size:12px;color:var(--fg-soft);align-self:center;">← 隨時可用,不綁功能</span>
+  </div>
+  <div class="legend">
+    <span><i class="dot f"></i> 地基</span>
+    <span><i class="dot m"></i> 功能開發主線</span>
+    <span><i class="dot a"></i> 輔助 / 維護工具</span>
+  </div>
+
+  <h2>各 Stage 卡片</h2>
+  <p class="section-sub">每張卡片說明用途,以及使用者的 Input 與產出的 Output。</p>
+  <div class="cards">
+
+    <div class="card foundation">
+      <h3><span class="num">1</span> ubiquitous-language-mapping</h3>
+      <p class="cmds">/ul-init · /ul-update</p>
+      <p class="desc"><strong>地基。</strong>掃描既有程式碼,建立領域術語表,對齊「業務用語 ↔ 程式命名 ↔ UI 文字」。下游所有 skill 都靠它用專案自己的語言提問與產出。</p>
+      <div class="io">
+        <div><span class="k">Input</span> 既有 codebase(INIT);語言演進的增修需求(UPDATE)</div>
+        <div><span class="k">Output</span> <code>.sdd/UL-MAP.md</code></div>
+      </div>
+    </div>
+
+    <div class="card main">
+      <h3><span class="num">2</span> clarify</h3>
+      <p class="cmds">/clarify</p>
+      <p class="desc">寫程式前先達成「意圖共識」,再用具體範例(happy path + 邊界 + 例外)把行為釘死。純業務語言,只講 <em>what</em> 不講 <em>how</em>。</p>
+      <div class="io">
+        <div><span class="k">Input</span> 一句功能需求,並在共識迴圈中回答提問、確認範例</div>
+        <div><span class="k">Output</span> <code>.sdd/{date}-{feature}/BRIEF.md</code></div>
+      </div>
+    </div>
+
+    <div class="card main">
+      <h3><span class="num">3</span> prd</h3>
+      <p class="cmds">/prd · /prd project</p>
+      <p class="desc">以 UL Map 為基礎做需求訪談,產出正式 PRD,並把範例轉成 inline 的 <strong>Gherkin 驗收條件</strong>。Project 模式則產出/更新專案總覽。</p>
+      <div class="io">
+        <div><span class="k">Input</span> 回答需求訪談(Feature);或直接同步架構(Project)</div>
+        <div><span class="k">Output</span> <code>PRD.md</code> 或 <code>.sdd/PROJECT.md</code></div>
+      </div>
+    </div>
+
+    <div class="card main">
+      <h3><span class="num">4</span> architecture</h3>
+      <p class="cmds">/architecture · /arch</p>
+      <p class="desc">PRD 刻意略過的「how」階段。設計變更範圍、新模組職責(表格),以及讓未來需求便宜可加的接縫(seam),並把每個 scenario 對應到負責元件。</p>
+      <div class="io">
+        <div><span class="k">Input</span> 已完成的 <code>PRD.md</code>(自動讀取 PROJECT/UL-MAP 與 codebase)</div>
+        <div><span class="k">Output</span> <code>.sdd/{date}-{feature}/ARCH.md</code></div>
+      </div>
+    </div>
+
+    <div class="card main">
+      <h3><span class="num">5</span> tdd</h3>
+      <p class="cmds">/tdd</p>
+      <p class="desc">依 <code>PRD.md</code> + <code>ARCH.md</code> 做 red-green-refactor 實作。每個 cycle 都 commit,進度存 SQL 可續作。</p>
+      <div class="io">
+        <div><span class="k">Input</span> 審核 skill 提出的 test plan 並確認</div>
+        <div><span class="k">Output</span> 實作程式碼 + 測試(綠燈套件)+ 逐 cycle commit</div>
+      </div>
+    </div>
+
+    <div class="card aux">
+      <h3><span class="num">＋</span> contract</h3>
+      <p class="cmds">/contract</p>
+      <p class="desc">以<strong>驗收準則(AC)為 oracle</strong> 驗證實作是否符合契約(PRD 優先,否則 BRIEF)。每條 clause 先從規格推導應有結果,再<strong>獨立</strong>判斷測試有無斷言它、程式碼有無產出它。標出 violations / mis-asserted / gaps / partial / orphans。屬<strong>靜態稽核</strong>,不跑完整套件,不改 source。</p>
+      <div class="io">
+        <div><span class="k">Input</span> 已有實作 + <code>.sdd/{feature}/</code> 契約文件</div>
+        <div><span class="k">Output</span> <code>.sdd/{feature}/CONTRACT.md</code>(Traceability Matrix)</div>
+      </div>
+    </div>
+
+    <div class="card aux">
+      <h3><span class="num">＋</span> visionize</h3>
+      <p class="cmds">/visionize</p>
+      <p class="desc">把 BRIEF/PRD 變成一頁自包含 HTML,讓團隊「看見」計畫(目標、範圍、人物誌、流程圖、Gherkin 情境、風險)。只投影不創作,缺漏標 <code>TBD</code>。</p>
+      <div class="io">
+        <div><span class="k">Input</span> <code>.sdd/{date}-{feature}/</code> 內的 BRIEF 和/或 PRD</div>
+        <div><span class="k">Output</span> <code>.sdd/{date}-{feature}/VISION.html</code></div>
+      </div>
+    </div>
+
+    <div class="card aux">
+      <h3><span class="num">＋</span> improve-codebase</h3>
+      <p class="cmds">/improve-codebase</p>
+      <p class="desc">找出散落邏輯,收斂成 <strong>deep module</strong>(穩定介面吸收複雜度,呼叫端保持簡單),並補介面測試。與功能無關,隨時可跑。</p>
+      <div class="io">
+        <div><span class="k">Input</span> 指定要改善的既有 codebase</div>
+        <div><span class="k">Output</span> 重構後的模組 + 介面測試</div>
+      </div>
+    </div>
+
+  </div>
+
+  <h2>對照表</h2>
+  <p class="section-sub">Stage、用途、輸入與輸出的一覽表。</p>
+  <div class="table-scroll">
+    <table>
+      <thead>
+        <tr>
+          <th>Stage(指令)</th>
+          <th>類型</th>
+          <th>用途</th>
+          <th>使用者 Input</th>
+          <th>Output</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>ubiquitous-language-mapping</code><br><small>/ul-init · /ul-update</small></td>
+          <td>地基</td>
+          <td>建立領域術語表,對齊業務用語、程式命名與 UI 文字</td>
+          <td>既有 codebase / 語言增修需求</td>
+          <td><code>.sdd/UL-MAP.md</code></td>
+        </tr>
+        <tr>
+          <td><code>clarify</code><br><small>/clarify</small></td>
+          <td>主線</td>
+          <td>達成意圖共識,用具體範例釘死行為(純業務語言)</td>
+          <td>功能需求 + 回答提問 / 確認範例</td>
+          <td><code>BRIEF.md</code></td>
+        </tr>
+        <tr>
+          <td><code>prd</code><br><small>/prd · /prd project</small></td>
+          <td>主線</td>
+          <td>需求訪談 → PRD,範例轉 Gherkin AC;或同步專案總覽</td>
+          <td>回答訪談 / 直接同步架構</td>
+          <td><code>PRD.md</code> 或 <code>PROJECT.md</code></td>
+        </tr>
+        <tr>
+          <td><code>architecture</code><br><small>/architecture · /arch</small></td>
+          <td>主線</td>
+          <td>設計技術方案:變更範圍、模組職責、可擴充接縫</td>
+          <td>已完成的 <code>PRD.md</code></td>
+          <td><code>ARCH.md</code></td>
+        </tr>
+        <tr>
+          <td><code>tdd</code><br><small>/tdd</small></td>
+          <td>主線</td>
+          <td>依 PRD + ARCH 做 red-green-refactor,逐 cycle commit</td>
+          <td>審核並確認 test plan</td>
+          <td>實作 + 測試(綠燈)+ commits</td>
+        </tr>
+        <tr>
+          <td><code>contract</code><br><small>/contract</small></td>
+          <td>輔助</td>
+          <td>以驗收準則(AC)為 oracle 做靜態符合度稽核,標出 violations / mis-asserted / gaps / orphans</td>
+          <td>實作 + 契約文件</td>
+          <td><code>CONTRACT.md</code></td>
+        </tr>
+        <tr>
+          <td><code>visionize</code><br><small>/visionize</small></td>
+          <td>輔助</td>
+          <td>把 BRIEF/PRD 投影成一頁可視化 HTML</td>
+          <td>BRIEF 和/或 PRD</td>
+          <td><code>VISION.html</code></td>
+        </tr>
+        <tr>
+          <td><code>improve-codebase</code><br><small>/improve-codebase</small></td>
+          <td>輔助</td>
+          <td>將散落邏輯收斂成 deep module,補介面測試</td>
+          <td>指定的既有 codebase</td>
+          <td>重構模組 + 介面測試</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>使用建議</h2>
+  <div class="cards">
+    <div class="card foundation">
+      <h3>新專案起手</h3>
+      <p class="desc"><code>/ul-init</code> → <code>/prd project</code><br>先建立領域地基與專案總覽。</p>
+    </div>
+    <div class="card main">
+      <h3>開發新功能</h3>
+      <p class="desc"><code>/clarify</code> → <code>/prd</code> →(可選 <code>/visionize</code>)→ <code>/architecture</code> → <code>/tdd</code></p>
+    </div>
+    <div class="card aux">
+      <h3>持續維護(不綁功能)</h3>
+      <p class="desc"><code>/prd project</code>、<code>/improve-codebase</code>、<code>/ul-update</code>、<code>/contract</code> 隨時可跑。</p>
+    </div>
+  </div>
+
+  <footer>
+    共享工作區 <code>.sdd/</code> 結構:<code>UL-MAP.md</code> · <code>PROJECT.md</code> · <code>{yyyy-MM-dd}-{feature}/</code>(<code>BRIEF.md</code> · <code>PRD.md</code> · <code>ARCH.md</code> · <code>VISION.html</code> · <code>CONTRACT.md</code>)<br>
+    由 sdd-skills 產生 · 單檔自包含文件。
+  </footer>
+
+</div>
+
+<script>
+  (function () {
+    var btn = document.getElementById('themeToggle');
+    var root = document.documentElement;
+    btn.addEventListener('click', function () {
+      var current = root.getAttribute('data-theme');
+      if (!current) {
+        // fall back to system preference to decide first toggle
+        current = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      }
+      root.setAttribute('data-theme', current === 'dark' ? 'light' : 'dark');
+    });
+  })();
+</script>
+</body>
+</html>

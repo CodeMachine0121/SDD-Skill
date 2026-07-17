@@ -24,10 +24,41 @@
 
 ## 3. User Stories & Acceptance Criteria
 
-| ID | User Story | Acceptance Criteria | Priority |
-| :--- | :--- | :--- | :--- |
-| **US-01** | **As a** [role], **I want** [feature], **so that** [value]. | 1. Criteria one<br>2. Criteria two<br>3. (Given/When/Then preferred) | P0 |
-| **US-02** | | | |
+Each user story lists its acceptance criteria as **Gherkin scenarios**. Every scenario is the formalized form of a requirement example in the feature's `BRIEF.md` — keep the happy-path / boundary / exception coverage. Write scenarios in **business language only** (no service / class / method names); each step mentions only the data that drives the outcome.
+
+> **Every `Then` states a concrete, observable outcome** — a specific state, message, or value (e.g. `Then checkout is rejected, showing "Invalid amount"`), never a vague one (`Then the order is processed correctly`). Keep it business language: concrete ≠ technical — no error codes, return shapes, or field names (those are decided later in `architecture`).
+
+### US-01 — [priority: P0]
+**As a** [role], **I want** [capability], **so that** [value].
+
+```gherkin
+Scenario: [happy path — from BRIEF example]
+  Given [business precondition — only relevant data]
+  When [the user action]
+  Then [the expected outcome]
+
+Scenario: [boundary — from BRIEF example]
+  Given [business precondition]
+  When [the user action]
+  Then [the expected outcome]
+
+Scenario: [exception — from BRIEF example]
+  Given [business precondition]
+  And [another relevant condition]
+  When [the user action]
+  Then [the expected outcome]
+  And [any follow-on outcome]
+```
+
+### US-02 — [priority]
+**As a** [role], **I want** [capability], **so that** [value].
+
+```gherkin
+Scenario: [...]
+  Given [...]
+  When [...]
+  Then [...]
+```
 
 ---
 
