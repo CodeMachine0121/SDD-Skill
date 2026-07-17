@@ -259,10 +259,10 @@
     <div class="card aux">
       <h3><span class="num">＋</span> contract</h3>
       <p class="cmds">/contract</p>
-      <p class="desc">用「實際執行的覆蓋率」驗證實作是否符合契約(PRD 優先,否則 BRIEF)。跑一次完整測試,標出 gaps / failing / orphans。不改 source。</p>
+      <p class="desc">以<strong>驗收準則(AC)為 oracle</strong> 驗證實作是否符合契約(PRD 優先,否則 BRIEF)。每條 clause 先從規格推導應有結果,再<strong>獨立</strong>判斷測試有無斷言它、程式碼有無產出它。標出 violations / mis-asserted / gaps / partial / orphans。屬<strong>靜態稽核</strong>,不跑完整套件,不改 source。</p>
       <div class="io">
         <div><span class="k">Input</span> 已有實作 + <code>.sdd/{feature}/</code> 契約文件</div>
-        <div><span class="k">Output</span> <code>.sdd/{feature}/CONTRACT.md</code></div>
+        <div><span class="k">Output</span> <code>.sdd/{feature}/CONTRACT.md</code>(Traceability Matrix)</div>
       </div>
     </div>
 
@@ -340,7 +340,7 @@
         <tr>
           <td><code>contract</code><br><small>/contract</small></td>
           <td>輔助</td>
-          <td>以執行覆蓋率驗證契約,標出 gaps / failing / orphans</td>
+          <td>以驗收準則(AC)為 oracle 做靜態符合度稽核,標出 violations / mis-asserted / gaps / orphans</td>
           <td>實作 + 契約文件</td>
           <td><code>CONTRACT.md</code></td>
         </tr>

@@ -159,44 +159,7 @@ For orphans, scan the implementation's public surface for behavior that no claus
 
 ## Phase 4 — Write the matrix
 
-Write `.sdd/{feature}/CONTRACT.md`:
-
-```markdown
-# Contract Traceability Matrix — {feature}
-
-Contract: {PRD.md | BRIEF.md}
-Design map: {ARCH.md | none}
-Implementation: {path}
-Oracle: Acceptance Criteria ({N} clauses)
-
-## Clauses
-
-The `Spec-expected` column holds the business-observable oracle from Phase 2; the
-concrete artifact it bridges to (via UL-MAP/ARCH) is what the audit columns check.
-
-| ID | Clause | Spec-expected (oracle) | Impl | Test | Test audit | Code audit | Status |
-|----|--------|------------------------|------|------|------------|------------|--------|
-| AC-1 | <verbatim> | 結帳被拒絕,顯示「金額不正確」 | svc.ts:42 | order.test.ts:t_neg | asserts-oracle | produces-oracle | ✅ conforms |
-| AC-2 | <verbatim> | ... | — | — | no-test | not-implemented | ❌ gap |
-| AC-3 | <verbatim> | 顯示「金額不正確」 | svc.ts:50 | order.test.ts:t_neg2 | shallow | produces-oracle | 🟠 mis-asserted |
-| BR-1 | <verbatim> | 訂單總額 = 小計 − 折扣 | order.ts:80 | order.test.ts:t_total | asserts-oracle | diverges | 🔴 violation |
-
-## Orphans (code with no clause)
-
-| Code | Description | Verdict |
-|------|-------------|---------|
-| util.ts:90 | <what it does> | undocumented / **violation (out-of-scope)** |
-
-## Summary
-
-- Conforms: X/N clauses ✅ (P%)
-- Violations: list of 🔴 IDs  (code produces the wrong outcome)
-- Mis-asserted: list of 🟠 IDs  (green test asserts the wrong/weaker thing)
-- Partial: list of 🟡 IDs  (no test asserts the oracle)
-- Gaps: list of ❌ IDs
-- Unclear: list of ❔ IDs
-- Orphans: count
-```
+Write `.sdd/{feature}/CONTRACT.md` using [references/contract-template.md](references/contract-template.md). It has three sections — the **Clauses** matrix (one row per clause, carrying its Phase 2 oracle and both audit columns), the **Orphans** table, and the **Summary** roll-up. Keep every clause's verbatim text, stable ID, and recorded oracle so the matrix stays re-runnable and diff-able.
 
 ---
 

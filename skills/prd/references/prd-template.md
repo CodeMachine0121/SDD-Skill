@@ -26,7 +26,7 @@
 
 Each user story lists its acceptance criteria as **Gherkin scenarios**. Every scenario is the formalized form of a requirement example in the feature's `BRIEF.md` — keep the happy-path / boundary / exception coverage. Write scenarios in **business language only** (no service / class / method names); each step mentions only the data that drives the outcome.
 
-> **Every `Then` states a concrete, observable outcome** — a specific state, message, or value (e.g. `Then 結帳被拒絕,並顯示「金額不正確」`), never a vague one (`Then 系統正確處理訂單`). Keep it business language: concrete ≠ technical — no error codes, return shapes, or field names (those are decided later in `architecture`).
+> **Every `Then` states a concrete, observable outcome** — a specific state, message, or value (e.g. `Then checkout is rejected, showing "Invalid amount"`), never a vague one (`Then the order is processed correctly`). Keep it business language: concrete ≠ technical — no error codes, return shapes, or field names (those are decided later in `architecture`).
 
 ### US-01 — [priority: P0]
 **As a** [role], **I want** [capability], **so that** [value].
