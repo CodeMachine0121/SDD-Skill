@@ -1,6 +1,6 @@
 # sdd-skills
 
-> A collection of GitHub Copilot CLI skills that guide software development from domain language all the way to production-ready code.
+> A Claude Code plugin whose skills guide software development from domain language all the way to production-ready code.
 
 ---
 
@@ -19,7 +19,7 @@ Forge turns those fundamentals into a concrete, skill-by-skill workflow for the 
 
 ## Overview
 
-Forge provides a structured, repeatable development workflow powered by Copilot CLI skills. Each skill owns one phase of the process, keeping responsibilities sharp and handoffs clean.
+Forge provides a structured, repeatable development workflow powered by Claude Code skills. Each skill owns one phase of the process, keeping responsibilities sharp and handoffs clean.
 
 ```
 ubiquitous-language-mapping  →  clarify  →  prd  →  architecture  →  tdd  →  improve-codebase

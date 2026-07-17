@@ -1,6 +1,6 @@
 {
   "name": "sdd-skills",
-  "description": "A collection of GitHub Copilot CLI skills that guide software development from domain language all the way to production-ready code, covering ubiquitous language mapping, requirements clarification, PRD, architecture design, TDD, and codebase improvement.",
+  "description": "A Claude Code plugin whose skills guide software development from domain language all the way to production-ready code, covering ubiquitous language mapping, requirements clarification, PRD, architecture design, TDD, and codebase improvement.",
   "version": "1.5.0",
   "author": {
     "name": "James Hsueh",
