@@ -169,6 +169,7 @@ After the interview is complete:
    - Fill every section with answers collected during the interview.
    - Use domain vocabulary from UL-MAP.md for all entity and action names.
    - **Acceptance Criteria (Section 3):** convert every requirement example in `BRIEF.md` into a Gherkin `Scenario` (`Given / And / When / Then / And`), grouped under the user story it belongs to. Preserve the happy-path / boundary / exception coverage from the brief, and keep the data-minimality principle — each step mentions only the data that drives the outcome. The scenarios live **inline in the PRD**; do not emit a separate `.feature` file.
+     - **Every `Then` must state a concrete, observable business outcome** — a specific state, message, or value the domain can check (e.g. `Then 結帳被拒絕,並顯示「金額不正確」`). Never a vague one (`Then 系統正確處理訂單`), because a downstream verifier turns each `Then` into the oracle it checks the code against. "Concrete" is **not** "technical": still no error codes, return shapes, field names, or endpoints — the outcome stays in business language; its technical form is decided later in `architecture`.
    - Mark any unanswered section `TBD` rather than leaving it blank.
 4. **Business-language check.** Re-read the finished PRD and confirm it contains **zero technical terms** — no service / class / method / table / endpoint names, frameworks, or design patterns, in the AC scenarios or anywhere else. Rephrase anything that leaked implementation detail before reporting.
 5. Report: "PRD written to `.sdd/{yyyy-MM-dd}-{feature-slug}/PRD.md`."

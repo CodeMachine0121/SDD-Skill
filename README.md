@@ -89,14 +89,16 @@ Tracks progress in SQL so sessions can be resumed mid-cycle.
 ---
 
 ### `contract` — Contract Traceability Matrix
-Verifies that an agent's implementation conforms to the contract — the feature's **PRD** (or **BRIEF**) — by **executed coverage**. Builds a matrix mapping every contract clause (each PRD Gherkin scenario & business rule, or BRIEF requirements & examples) to its code site and test, runs the full suite once, then flags **gaps** (clauses with no implementation), **failing** clauses (test exists but red), and **orphans** (code answering to no clause — including out-of-scope violations).
+Verifies that an implementation conforms to the contract — the feature's **PRD** (or **BRIEF**) — using the **Acceptance Criteria as the oracle**, not the test suite's pass/fail. For every clause it first derives the expected outcome from the spec alone, then judges **independently** whether the test asserts that outcome and whether the production code produces it. A clause conforms only when both hold.
 
 - Reads the contract from `.sdd/{feature}/` — `PRD.md` preferred, else `BRIEF.md`
-- Uses `ARCH.md`'s scenario→component map (when present) to locate code faster and sharpen gap detection
-- Runs the test suite but never edits source code
-- Outputs `.sdd/{feature}/CONTRACT.md`
+- **Oracle first:** derives each clause's expected result from the Gherkin before opening any code, so the answer can't be rationalized backward from the implementation
+- Audits the test (asserts-oracle / mis-asserted / shallow) and the code (produces-oracle / diverges / unclear) separately against that oracle
+- Flags **violations** (code produces the wrong outcome), **mis-asserted** clauses (green test asserts the wrong/weaker thing), **gaps**, **partial**, and **orphans** (code answering to no clause — including out-of-scope violations)
+- Uses `ARCH.md`'s scenario→component map (when present) to locate code faster
+- Never edits source code; outputs `.sdd/{feature}/CONTRACT.md`
 
-> A passing test confirms a clause is exercised, not that it asserts the right thing — pair with `/tdd` for deeper behavioral confidence.
+> A **static conformance audit** — it judges test assertions and code paths against the spec, not by running the full suite. For dynamic proof of an `unclear` clause, drive it via `/tdd`.
 
 ---
 
