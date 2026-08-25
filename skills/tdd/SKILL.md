@@ -16,7 +16,7 @@ The design contract for this skill is exactly two documents: **`PRD.md`** (what 
    - **`PRD.md`** — the Section 3 acceptance-criteria scenarios (Gherkin) are the behavior contract.
    - **`ARCH.md`** — the change scope and the new/modified classes and modules with their responsibilities. Implement to this design; do not invent a different structure. Missing → warn ("Run `/architecture` first for a design to follow") and continue only if the user insists.
 2. Find `.sdd/UL-MAP.md` (fallback: root, `docs/`). Missing → warn, continue. Use its vocabulary for names.
-3. **Detect the project's commit style** — see [Commit Convention](#commit-convention) — so every cycle commit matches it from the first commit onward.
+3. **Load the [`commit`](../commit/SKILL.md) skill** — it owns the commit convention for this workflow (English Conventional Commits, one commit per cycle, no SDD identifiers). Follow it for every commit made in this run.
 4. Check SQL `test_cases` for existing rows matching this PRD → if found, ask to resume (skip to Cycle) or reset.
 
 ---
@@ -43,27 +43,13 @@ For each `pending` test case:
 - Run **all module tests** after each change. All must stay green.
 - Mark test case `done` in SQL.
 
-**COMMIT** — Commit this cycle before starting the next test case.
-- Stage only the files for this cycle (the test + its implementation), not unrelated changes.
-- Write the message per [Commit Convention](#commit-convention) — describe the behavior, never a test-case id or document number.
-- **One commit per completed TDD cycle.** Additionally, commit an **app integration** on its own (wiring a component into the composition root / DI / an endpoint / config) so it is separate from behavior cycles.
+**COMMIT** — Commit this cycle before starting the next test case, per the [`commit`](../commit/SKILL.md) skill.
+- **One commit per completed TDD cycle** — the test and its implementation together. An **app integration** (wiring a component into the composition root / DI / an endpoint / config) gets its own commit, separate from behavior cycles.
+- Stage only the files for this cycle, not unrelated changes.
+- English Conventional Commits, describing the behavior — never a test-case id or document number.
 - Every commit must be green and self-contained.
 
 Repeat until no `pending` rows remain. Mark unresolvable cases `blocked` with reason.
-
----
-
-## Commit Convention
-
-Determine the style once in Pre-flight and reuse it for every commit:
-
-1. Inspect recent history — `git log --oneline -20`. Match the project's existing convention: prefix style (`feat:`, `fix:`, …), language, casing, and whether a scope is used.
-2. **If the project has no history (brand-new project)** → default to **English**, following **Conventional Commits**: `type(scope): summary` (e.g. `feat(cart): add item to cart`).
-
-Rules that always hold, regardless of detected style:
-
-- **No SDD identifiers in the message** — never include a test-case id, scenario/AC number, PRD/ARCH filename, or the feature-folder date. Commits describe *behavior*, not our internal document numbering.
-- Subject line is imperative and concise; the test and implementation of one cycle go in the **same** commit.
 
 ---
 
