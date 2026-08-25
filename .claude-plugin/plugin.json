@@ -1,11 +1,11 @@
 {
   "name": "sdd-skills",
-  "description": "A Claude Code plugin whose skills guide software development from domain language all the way to production-ready code, covering ubiquitous language mapping, requirements clarification, PRD, architecture design, TDD, and codebase improvement.",
-  "version": "1.5.1",
+  "description": "A Claude Code plugin whose skills guide software development from domain language all the way to production-ready code, covering ubiquitous language mapping, requirements clarification, PRD, architecture design, implementation (TDD or code-first), commit convention, and codebase improvement.",
+  "version": "1.6.0",
   "author": {
     "name": "James Hsueh",
     "email": "asdfg55887@gmail.com"
   },
   "homepage": "https://github.com/CodeMachine0121/SDD-Skill",
-  "keywords": ["sdd", "tdd", "prd", "ubiquitous-language", "clarify", "architecture", "refactoring", "domain-driven-design", "visionize"]
+  "keywords": ["sdd", "tdd", "code-first", "implement", "commit", "conventional-commits", "prd", "ubiquitous-language", "clarify", "architecture", "refactoring", "domain-driven-design", "visionize"]
 }
