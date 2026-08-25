@@ -22,7 +22,8 @@ Forge turns those fundamentals into a concrete, skill-by-skill workflow for the 
 Forge provides a structured, repeatable development workflow powered by Claude Code skills. Each skill owns one phase of the process, keeping responsibilities sharp and handoffs clean.
 
 ```
-ubiquitous-language-mapping  →  clarify  →  prd  →  architecture  →  tdd  →  improve-codebase
+ubiquitous-language-mapping  →  clarify  →  prd  →  architecture  →  implement  →  improve-codebase
+                                                                     └ tdd │ code-first
  ↑                    ↑                      ↑
  └─── foundation ─────┴── anytime, standalone ┘
 ```
@@ -71,20 +72,52 @@ The **"how"** stage that PRD deliberately leaves out. Reads the feature's `PRD.m
 
 - Reads `PRD.md` (its Gherkin acceptance criteria are the design contract), plus `PROJECT.md` / `UL-MAP.md` and the existing codebase
 - Designs from the perspective of **the next engineer** — deep modules, stable interfaces, an explicit axis-of-change seam so the next requirement is add-only
-- Maps every PRD scenario to the component that fulfills it (traceability for `/contract` and `/tdd`)
+- Maps every PRD scenario to the component that fulfills it (traceability for `/contract` and `/implement`)
 - Never edits source code; outputs `.sdd/{date}-{feature}/ARCH.md`
 
 ---
 
+### `implement` — Implementation Entry Point (pick your discipline)
+The stage where the feature actually gets built. Reads the same two documents as `tdd` — `PRD.md` and `ARCH.md` — and lets you choose **how** to get there:
+
+- **TDD mode** — hands off to the `tdd` skill: red-green-refactor, one case at a time
+- **Code-first mode** — build the slice whole, then cover it (Ousterhout's "write the unit, then test it")
+
+Why the choice exists: TDD's small steps are a **human** discipline — they shrink the problem until it fits in *our* working memory. Uncle Bob, TDD's loudest advocate, has [said so himself](https://www.youtube.com/watch?v=zcLPGC-tvgk): that constraint is about human short-term memory, and imposing it on a model that holds the entire feature at once is not obviously wise — provided you still land at 100% coverage.
+
+What code-first mode refuses to give up is the three guarantees TDD hands you for free:
+
+| TDD gives free | Code-first earns it back |
+|---|---|
+| Test derived from the requirement (no code exists to copy from) | **Oracle phase** — expected outcomes pinned from the PRD *before* any implementation, then frozen |
+| RED proves the test can fail | **Falsify phase** — break the behavior, watch that test go red, restore (or run mutation testing) |
+| Every line exists because a test demanded it | **Coverage gate** — 100% of new/changed lines and branches, or the code gets deleted |
+
+Without those, "test-after" degrades into tests that describe whatever the code already does — green, worthless, and worse than nothing because they license the next change. Per-feature choice, with a recommendation (algorithmic / money / legacy → TDD; settled design, broad mechanical slice → code-first), and a bail-out back to red-green for any case whose expected outcome you can't state up front.
+
+---
+
 ### `tdd` — Test-Driven Implementation
-Implements a feature against exactly two documents — `PRD.md` (acceptance criteria) and `ARCH.md` (the technical design) — through red-green-refactor cycles.
+The red-green-refactor engine — callable directly, or as `implement`'s TDD mode. Implements a feature against exactly two documents — `PRD.md` (acceptance criteria) and `ARCH.md` (the technical design) — through red-green-refactor cycles.
 
 1. Parses the PRD's Gherkin scenarios into atomic test cases, mapped to the components in `ARCH.md`
 2. Presents the test plan for your review
 3. Runs one test case at a time: write failing test → make it pass → refactor
-4. **Commits every cycle** (and every app integration separately) — following the project's existing commit style, or English Conventional Commits on a fresh project, with no SDD identifiers in the message
+4. **Commits every cycle** (and every app integration separately) — through the shared `commit` skill
 
 Tracks progress in SQL so sessions can be resumed mid-cycle.
+
+---
+
+### `commit` — Commit Convention
+The commit rules, extracted once and shared by `tdd` and `implement` so the log looks the same no matter which discipline built the feature. Also runnable standalone as `/commit` on a dirty tree.
+
+- **Conventional Commits** — `type(scope): summary`, imperative, scope in UL-Map vocabulary
+- **One commit per unit of work** — a completed TDD cycle (test + implementation together), or one app integration (composition root / DI / route / config) on its own
+- **No SDD identifiers** — no test-case id, AC/scenario number, document filename, or feature-folder date; the log is read by people who never open `.sdd/`
+- **English, always** — regardless of the language of the conversation, the spec, or the existing history, so `git log --grep` and changelog tooling keep working
+
+Standalone `/commit` reads the diff, groups it into units of work (proposing a split when there is more than one), verifies green, stages by path, and commits — no push, no PR, unless asked.
 
 ---
 
@@ -98,7 +131,7 @@ Verifies that an implementation conforms to the contract — the feature's **PRD
 - Uses `ARCH.md`'s scenario→component map (when present) to locate code faster
 - Never edits source code; outputs `.sdd/{feature}/CONTRACT.md`
 
-> A **static conformance audit** — it judges test assertions and code paths against the spec, not by running the full suite. For dynamic proof of an `unclear` clause, drive it via `/tdd`.
+> A **static conformance audit** — it judges test assertions and code paths against the spec, not by running the full suite. For dynamic proof of an `unclear` clause, drive it via `/implement`.
 
 ---
 
@@ -142,14 +175,17 @@ Improves design quality by finding scattered logic and consolidating it into dee
 4. /prd               ← conduct requirements interview   → PRD.md
 5. /visionize         ← visualize the plan as HTML       → VISION.html  (optional)
 6. /architecture      ← design the technical approach    → ARCH.md
-7. /tdd               ← implement test-by-test           → green suite
+7. /implement         ← pick TDD or code-first, build it → green suite
 ```
+
+> Step 7 asks which discipline to use, and recommends one for that feature. `/implement tdd` and `/implement code-first` skip the question; `/tdd` still works as a direct entry point.
 
 ### Ongoing maintenance (anytime, not feature-bound)
 
 ```
 /prd project          ← refresh PROJECT.md when architecture evolves
 /improve-codebase     ← consolidate fragile or scattered code
+/commit               ← group, verify and commit whatever is in the tree
 /ubiquitous-language-mapping update  ← extend the domain glossary as language shifts
 ```
 
@@ -179,6 +215,8 @@ Improves design quality by finding scattered logic and consolidating it into dee
 | `prd` | `/prd`, `/prd project` | `.sdd/{date}-{feature}/PRD.md` or `.sdd/PROJECT.md` |
 | `visionize` | `/visionize` | `.sdd/{date}-{feature}/VISION.html` |
 | `architecture` | `/architecture`, `/arch` | `.sdd/{date}-{feature}/ARCH.md` |
-| `tdd` | `/tdd` | implementation + tests |
+| `implement` | `/implement`, `/implement code-first` | implementation + tests (mode of your choice) |
+| `tdd` | `/tdd` | implementation + tests (red-green-refactor) |
+| `commit` | `/commit` | commits, English Conventional Commits, one per unit of work |
 | `contract` | `/contract` | `.sdd/{feature}/CONTRACT.md` |
 | `improve-codebase` | `/improve-codebase` | refactored modules + interface tests |

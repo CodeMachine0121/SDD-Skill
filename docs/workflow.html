@@ -188,9 +188,10 @@
     <div class="arrow">→</div>
     <div class="flow-node main"><span class="cmd">architecture</span><span class="tag">技術設計</span></div>
     <div class="arrow">→</div>
-    <div class="flow-node main"><span class="cmd">tdd</span><span class="tag">TDD 實作</span></div>
+    <div class="flow-node main"><span class="cmd">implement</span><span class="tag">實作 · tdd │ code-first</span></div>
   </div>
   <div class="aux-row">
+    <span class="aux-chip">＋ commit · 提交規範</span>
     <span class="aux-chip">＋ contract · 契約驗證</span>
     <span class="aux-chip">＋ visionize · 計畫可視化</span>
     <span class="aux-chip">＋ improve-codebase · 深模組重構</span>
@@ -247,12 +248,32 @@
     </div>
 
     <div class="card main">
-      <h3><span class="num">5</span> tdd</h3>
+      <h3><span class="num">5</span> implement</h3>
+      <p class="cmds">/implement · /implement tdd · /implement code-first</p>
+      <p class="desc">實作入口,讓開發者<strong>選紀律</strong>:<strong>TDD 模式</strong>交棒給 <code>tdd</code> skill 逐案 red-green-refactor;<strong>code-first 模式</strong>(Uncle Bob 鬆綁 / Ousterhout 主張)先把整個 slice 寫完再補測試。理由:TDD 小步是為了「人類短期記憶」而設的紀律,對記得住整個功能的模型未必適用——但前提是最後要 100% 覆蓋。code-first 必須把 TDD 白送的三個保證買回來:<strong>先釘 oracle</strong>(動工前從 PRD 寫死預期結果並凍結)、<strong>falsify</strong>(刻意打壞行為確認測試會紅,或跑 mutation testing)、<strong>覆蓋率關卡</strong>(新增/變更程式碼 100% 行與分支,否則刪掉)。說不出預期結果的個案隨時退回 red-green。</p>
+      <div class="io">
+        <div><span class="k">Input</span> <code>PRD.md</code> + <code>ARCH.md</code>,並選擇模式(skill 會給建議)</div>
+        <div><span class="k">Output</span> 實作程式碼 + 測試(綠燈套件)+ commits;code-first 另附覆蓋率與 falsify 報告</div>
+      </div>
+    </div>
+
+    <div class="card main">
+      <h3><span class="num">5a</span> tdd</h3>
       <p class="cmds">/tdd</p>
-      <p class="desc">依 <code>PRD.md</code> + <code>ARCH.md</code> 做 red-green-refactor 實作。每個 cycle 都 commit,進度存 SQL 可續作。</p>
+      <p class="desc">red-green-refactor 引擎:可直接呼叫,也是 <code>implement</code> 的 TDD 模式。依 <code>PRD.md</code> + <code>ARCH.md</code> 實作,每個 cycle 都 commit,進度存 SQL 可續作。</p>
       <div class="io">
         <div><span class="k">Input</span> 審核 skill 提出的 test plan 並確認</div>
         <div><span class="k">Output</span> 實作程式碼 + 測試(綠燈套件)+ 逐 cycle commit</div>
+      </div>
+    </div>
+
+    <div class="card aux">
+      <h3><span class="num">＋</span> commit</h3>
+      <p class="cmds">/commit</p>
+      <p class="desc">抽出來共用的<strong>提交規範</strong>,<code>tdd</code> 與 <code>implement</code> 都遵循它,所以不管用哪種紀律做出來的 log 長得一樣。四條規則:<strong>Conventional Commits</strong>(<code>type(scope): summary</code>,祈使句、scope 用 UL-Map 詞彙)、<strong>一個 commit 一個工作單位</strong>(一個 TDD cycle 的測試+實作綁在一起;app integration 自己一個 commit)、<strong>訊息不放 SDD 編號</strong>(test case id / AC 編號 / 文件檔名 / feature 資料夾日期一律不寫,因為讀 log 的人不會打開 <code>.sdd/</code>)、<strong>一律英文</strong>(不管對話、規格與既有歷史是什麼語言,讓 <code>git log --grep</code> 與 changelog 工具能用)。也可單獨 <code>/commit</code> 在髒的工作區上跑:讀 diff → 切工作單位(超過一個會先提議拆) → 驗綠燈 → 逐路徑 stage → commit。</p>
+      <div class="io">
+        <div><span class="k">Input</span> 工作區的變更(或由 <code>tdd</code> / <code>implement</code> 內部呼叫)</div>
+        <div><span class="k">Output</span> 一到多個綠燈、自包含的 commit;未經要求不 push、不開 PR</div>
       </div>
     </div>
 
@@ -331,11 +352,25 @@
           <td><code>ARCH.md</code></td>
         </tr>
         <tr>
+          <td><code>implement</code><br><small>/implement · /implement code-first</small></td>
+          <td>主線</td>
+          <td>實作入口,選 TDD 或 code-first(先寫完再補測試 + 釘 oracle + falsify + 100% 覆蓋)</td>
+          <td><code>PRD.md</code> + <code>ARCH.md</code>,選擇模式</td>
+          <td>實作 + 測試(綠燈)+ commits</td>
+        </tr>
+        <tr>
           <td><code>tdd</code><br><small>/tdd</small></td>
           <td>主線</td>
           <td>依 PRD + ARCH 做 red-green-refactor,逐 cycle commit</td>
           <td>審核並確認 test plan</td>
           <td>實作 + 測試(綠燈)+ commits</td>
+        </tr>
+        <tr>
+          <td><code>commit</code><br><small>/commit</small></td>
+          <td>輔助</td>
+          <td>共用提交規範:Conventional Commits、一單位一 commit、不放 SDD 編號、一律英文</td>
+          <td>工作區變更(或由 tdd / implement 呼叫)</td>
+          <td>綠燈、自包含的 commits</td>
         </tr>
         <tr>
           <td><code>contract</code><br><small>/contract</small></td>
@@ -370,11 +405,11 @@
     </div>
     <div class="card main">
       <h3>開發新功能</h3>
-      <p class="desc"><code>/clarify</code> → <code>/prd</code> →(可選 <code>/visionize</code>)→ <code>/architecture</code> → <code>/tdd</code></p>
+      <p class="desc"><code>/clarify</code> → <code>/prd</code> →(可選 <code>/visionize</code>)→ <code>/architecture</code> → <code>/implement</code>(選 <code>tdd</code> 或 <code>code-first</code>)</p>
     </div>
     <div class="card aux">
       <h3>持續維護(不綁功能)</h3>
-      <p class="desc"><code>/prd project</code>、<code>/improve-codebase</code>、<code>/ul-update</code>、<code>/contract</code> 隨時可跑。</p>
+      <p class="desc"><code>/prd project</code>、<code>/improve-codebase</code>、<code>/ul-update</code>、<code>/contract</code>、<code>/commit</code> 隨時可跑。</p>
     </div>
   </div>
 
